@@ -1,54 +1,99 @@
-# React + TypeScript + Vite
+# Pioneer Ventures Society Admin Panel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This codebase powers the **Admin Panel** for the Pioneer Ventures Society (PVS) platform.
 
-Currently, two official plugins are available:
+The Admin Panel is a secure, role-based interface for creators (T1) and moderators (T2) to manage site content, approve submissions, oversee members, and maintain the quality of the main PVS website.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Content Moderation:** Review, approve, and publish blog posts, events, and member profiles.
+- **Role-based Permissions:**
+  - **T1 (Creator):** Submit content for review.
+  - **T2 (Moderator):** Review, approve, and publish content; manage member data.
+- **Audit Logging:** Track all admin actions for transparency and security.
+- **Member Management:** View, edit, and manage member records.
+- **Event Management:** Create, update, and remove events.
+- **Secure Authentication:** Firebase Authentication for admin access.
+- **Responsive UI:** Works on desktop and mobile for admins on the go.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Frontend:** TypeScript, [your chosen framework: React/Vue/Other]
+- **Styling:** CSS, [any framework or custom]
+- **Backend & Hosting:** Firebase (Firestore, Authentication, Storage, Hosting)
+- **Deployment:** [Subdomain or subpath, e.g., `admin.pvsociety.org` or `/admin`]
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🚦 Access Control
+
+- **Restricted to authorized PVS admins.**
+- All actions are logged and subject to moderation workflows.
+- Uses the same Firebase project as the main site for seamless data access and consistency.
+
+---
+
+## ⚡ Getting Started
+
+1. **Clone the repo** (if in sub-directory, navigate to the admin folder)
+    ```sh
+    git clone https://github.com/WyvernPirate/Pioneer-Ventures-Society.git
+    cd Pioneer-Ventures-Society/Pioneers-Ventures-Society-Admin
+    ```
+
+2. **Install dependencies**
+    ```sh
+    npm install
+    ```
+
+3. **Configure Firebase**
+    - Copy `.env.example` to `.env` and insert your Firebase Admin Panel config (use same project as main site).
+
+4. **Run locally**
+    ```sh
+    npm start
+    ```
+
+---
+
+## 📦 Folder Structure
+
+- `/src` — Admin panel source code
+- `/assets` — Admin-specific images and icons
+- `/public` — Static assets and entry point
+
+---
+
+## 🚀 Deployment
+
+- Deployed via **Firebase Hosting**.
+- Typically served on a subdomain (`admin.pvsociety.org`) or subpath (`/admin`) for separation from the main site.
+- Uses Cloudflare for DNS and SSL.
+
+---
+
+## 📝 License
+
+[MIT](LICENSE) © Pioneer Ventures Society
+
+---
+
+## 🤝 Contributing
+
+Admin panel is restricted to authorized contributors.  
+Open an issue for bug reports, improvements, or access requests.
+
+---
+
+## 📬 Contact
+
+- [Your main email/contact form]
+- [Internal communication channel if any]
+
+---
+
+**PVS Admin Panel** – Empowering secure, community-driven management.
