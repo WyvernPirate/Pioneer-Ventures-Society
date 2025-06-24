@@ -1,4 +1,4 @@
-import { generateInspirationalQuote } from '@/ai/flows/generate-inspirational-quote';
+import { generateInspirationalQuote } from '@/ai/flow/generate-inspirational-qoute';
 import { cn } from '@/lib/utils';
 import { Lightbulb } from 'lucide-react';
 
