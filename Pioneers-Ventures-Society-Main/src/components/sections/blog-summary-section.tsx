@@ -1,8 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import Image from 'next/image';
+import { Link } from "react-router-dom";
+import Img from 'react-image';
 import { Newspaper, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge'; // Added missing import
 
@@ -57,21 +57,20 @@ export default function BlogSummarySection() {
         {newestPost && (
           <div className="mb-12">
             <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col md:flex-row">
-              <Link href={newestPost.slug} aria-label={`Read more about ${newestPost.title}`} className="md:w-1/2">
-                <Image
+              <Link to={newestPost.slug} aria-label={`Read more about ${newestPost.title}`} className="md:w-1/2">
+                <img
                   src={newestPost.image}
                   alt={newestPost.title}
                   width={800}
                   height={500}
                   className="w-full h-64 md:h-full object-cover"
                   data-ai-hint={newestPost.aiHint}
-                  priority
                 />
               </Link>
               <CardContent className="p-6 md:p-8 flex flex-col flex-grow md:w-1/2">
                 <Badge variant="default" className="bg-accent text-accent-foreground w-fit mb-3 text-sm">Latest Post</Badge>
                 <CardTitle className="font-headline text-2xl lg:text-3xl text-primary mb-3">
-                  <Link href={newestPost.slug} className="hover:text-accent transition-colors">
+                  <Link to={newestPost.slug} className="hover:text-accent transition-colors">
                     {newestPost.title}
                   </Link>
                 </CardTitle>
@@ -80,7 +79,7 @@ export default function BlogSummarySection() {
                   {newestPost.excerpt}
                 </CardDescription>
                 <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6">
-                  <Link href={newestPost.slug}>
+                  <Link to={newestPost.slug}>
                     Read More <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -93,8 +92,8 @@ export default function BlogSummarySection() {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             {otherPosts.map((post) => (
               <Card key={post.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                <Link href={post.slug} aria-label={`Read more about ${post.title}`}>
-                  <Image
+                <Link to={post.slug} aria-label={`Read more about ${post.title}`}>
+                  <img
                     src={post.image}
                     alt={post.title}
                     width={600}
@@ -105,7 +104,7 @@ export default function BlogSummarySection() {
                 </Link>
                 <CardContent className="p-6 flex flex-col flex-grow">
                   <CardTitle className="font-headline text-xl text-primary mb-2">
-                    <Link href={post.slug} className="hover:text-accent transition-colors">
+                    <Link to={post.slug} className="hover:text-accent transition-colors">
                       {post.title}
                     </Link>
                   </CardTitle>
@@ -114,7 +113,7 @@ export default function BlogSummarySection() {
                     {post.excerpt}
                   </CardDescription>
                   <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                    <Link href={post.slug}>
+                    <Link to={post.slug}>
                       Read More <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
@@ -126,7 +125,7 @@ export default function BlogSummarySection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg" asChild>
-            <Link href="/blog">
+            <Link to="/blog">
               View All Blog Posts <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
