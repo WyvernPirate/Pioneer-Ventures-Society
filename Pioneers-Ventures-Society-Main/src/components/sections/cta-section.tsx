@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from "react-router-dom";
 import { Zap, Users, Gift, ArrowRight } from 'lucide-react'; // Zap for "Get Involved", Users for "Join", Gift for "Donate"
@@ -43,3 +42,4 @@ const CtaSection = () => {
     </section>
   );
 }
+export default CtaSection;
