@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from "react-router-dom";
 import { Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -14,7 +14,7 @@ export default function SocialLinks() {
     <div className="flex space-x-3">
       {socialPlatforms.map((platform) => (
         <Button key={platform.name} variant="ghost" size="icon" asChild>
-          <Link href={platform.href} target="_blank" rel="noopener noreferrer" aria-label={platform.ariaLabel}>
+          <Link to={platform.href} target="_blank" rel="noopener noreferrer" aria-label={platform.ariaLabel}>
             <platform.icon className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors" />
           </Link>
         </Button>
