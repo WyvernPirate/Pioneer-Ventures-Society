@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Link } from "react-router-dom";
 import { Download, FileText, FolderArchive } from 'lucide-react';
 
 // Placeholder resources - mirror structure from /resources/page.tsx
@@ -68,7 +68,7 @@ export default function ResourcesSummarySection() {
                     <span>Size: {resource.fileSize}</span>
                   </div>
                   <Button asChild className="mt-auto w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link href={resource.downloadLink} download target="_blank" rel="noopener noreferrer">
+                    <Link to={resource.downloadLink} download target="_blank" rel="noopener noreferrer">
                       <Download className="mr-2 h-4 w-4" /> Download
                     </Link>
                   </Button>
@@ -84,7 +84,7 @@ export default function ResourcesSummarySection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg" asChild>
-            <Link href="/resources">
+            <Link to="/resources">
               View All Resources <Download className="ml-2 h-5 w-5" />
             </Link>
           </Button>
