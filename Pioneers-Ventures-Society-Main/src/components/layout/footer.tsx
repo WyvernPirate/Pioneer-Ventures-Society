@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import NewsletterForm from '@/components/common/newsletter-form';
 import SocialLinks from '@/components/common/social-links';
 import { Briefcase, Mail, MapPin, Phone } from 'lucide-react';
