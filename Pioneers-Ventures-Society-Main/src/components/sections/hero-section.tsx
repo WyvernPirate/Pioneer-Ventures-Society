@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import InspirationalQuote from '@/components/common/inspirational-quote';
+import { Link } from "react-router-dom";
+import InspirationalQuote from '@/components/common/inspirational-qoute';
 import { ArrowRight, Rocket } from 'lucide-react';
-import Image from 'next/image';
+import Img from 'react-image';
 
 export default function HeroSection() {
   return (
@@ -25,26 +25,25 @@ export default function HeroSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-300" asChild>
-                <Link href="#cta">
+                <Link to="#cta">
                   Join Our Mission <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="shadow-lg transform hover:scale-105 transition-transform duration-300" asChild>
-                <Link href="#initiatives">
+                <Link to="#initiatives">
                   Explore Initiatives
                 </Link>
               </Button>
             </div>
           </div>
           <div className="relative flex justify-center items-center p-4">
-            <Image 
+            <img 
               src="https://placehold.co/600x500.png" 
               alt="Abstract representation of innovation and collaboration"
               width={600}
               height={500}
               className="rounded-xl shadow-2xl object-cover"
               data-ai-hint="abstract innovation"
-              priority
             />
              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-accent/20 rounded-full filter blur-2xl opacity-70"></div>
              <div className="absolute -top-10 -left-10 w-32 h-32 bg-primary/10 rounded-full filter blur-2xl opacity-70"></div>
