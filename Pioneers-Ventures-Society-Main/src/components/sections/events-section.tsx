@@ -2,8 +2,8 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, Pin, Clock, ArrowRight, CalendarCheck } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import Img from 'react-image';
+import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 
 // Using a subset of events for the homepage summary
@@ -57,8 +57,8 @@ export default function EventsSection() {
           <div className="mb-12">
             <h3 className="font-headline text-2xl sm:text-3xl font-semibold text-primary mb-6 text-center md:text-left">Featured Upcoming Event</h3>
             <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col md:flex-row">
-               <Link href={newestEvent.registrationLink || '#'} aria-label={`Register for ${newestEvent.title}`} className="md:w-1/2">
-                <Image
+               <Link to={newestEvent.registrationLink || '#'} aria-label={`Register for ${newestEvent.title}`} className="md:w-1/2">
+                <img
                   src={newestEvent.image}
                   alt={newestEvent.title}
                   width={800}
@@ -70,7 +70,7 @@ export default function EventsSection() {
               <CardContent className="p-6 md:p-8 flex flex-col flex-grow md:w-1/2">
                 <Badge variant="default" className="bg-accent text-accent-foreground w-fit mb-3 text-sm">Upcoming</Badge>
                 <CardTitle className="font-headline text-2xl lg:text-3xl text-primary mb-3">
-                  <Link href={newestEvent.registrationLink || '#'} className="hover:text-accent transition-colors">
+                  <Link to={newestEvent.registrationLink || '#'} className="hover:text-accent transition-colors">
                     {newestEvent.title}
                   </Link>
                 </CardTitle>
@@ -83,7 +83,7 @@ export default function EventsSection() {
                   {newestEvent.description}
                 </CardDescription>
                 <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90 text-base py-3 px-6">
-                  <Link href={newestEvent.registrationLink || '#'}>
+                  <Link to={newestEvent.registrationLink || '#'}>
                     Register Now <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -98,7 +98,7 @@ export default function EventsSection() {
             <div className="grid md:grid-cols-2 gap-8">
               {otherUpcomingEvents.map((event) => (
                 <Card key={event.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-                  <Image
+                  <img
                     src={event.image}
                     alt={event.title}
                     width={600}
@@ -116,7 +116,7 @@ export default function EventsSection() {
                     </div>
                     <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">{event.description}</CardDescription>
                      <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90">
-                      <Link href={event.registrationLink || '#'}>
+                      <Link to={event.registrationLink || '#'}>
                         Register <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
                     </Button>
@@ -129,7 +129,7 @@ export default function EventsSection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg" asChild>
-            <Link href="/events">
+            <Link to="/events">
               View All Events <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
