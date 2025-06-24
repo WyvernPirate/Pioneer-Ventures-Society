@@ -1,4 +1,3 @@
-import React from 'react'
 import Header from '@/components/layout/header';
 import HeroSection from '@/components/sections/hero-section';
 import AboutPvsSection from '@/components/sections/about-pvs-section';
@@ -9,7 +8,7 @@ import BlogSummarySection from '@/components/sections/blog-summary-section';
 import EventsSection from '@/components/sections/events-section';
 import ResourcesSummarySection from '@/components/sections/resources-summary-section';
 import MemberSpotlightsSection from '@/components/sections/member-spotlights-section'; // This now serves as "Meet Our Founders"
-import CtaSection from '@/components/sections/cta-section';
+import  CtaSection  from '@/components/sections/cta-section';
 import Footer from '@/components/layout/footer';
 
 const App = () => {
