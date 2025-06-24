@@ -1,6 +1,4 @@
-import './App.css'
-export default App;
-
+import React from 'react'
 import Header from '@/components/layout/header';
 import HeroSection from '@/components/sections/hero-section';
 import AboutPvsSection from '@/components/sections/about-pvs-section';
@@ -14,7 +12,7 @@ import MemberSpotlightsSection from '@/components/sections/member-spotlights-sec
 import CtaSection from '@/components/sections/cta-section';
 import Footer from '@/components/layout/footer';
 
-export default function App {
+const App = () => {
   return (
     <>
     <div className="flex flex-col min-h-screen bg-background">
@@ -37,4 +35,4 @@ export default function App {
   );
 }
 
-return default App
+export default App;
