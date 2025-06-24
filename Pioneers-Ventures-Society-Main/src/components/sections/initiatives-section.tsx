@@ -1,8 +1,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import Image from 'next/image';
+import Img from 'react-image';
 import { Lightbulb, Users, Zap, ShieldHalf, GraduationCap, Handshake, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "react-router-dom";
 import { Button } from '../ui/button';
 
 const initiatives = [
@@ -50,7 +50,7 @@ export default function InitiativesSection() {
           {initiatives.map((initiative, index) => (
             <Card key={index} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
               <CardHeader className="p-0">
-                <Image 
+                <img 
                   src={initiative.image} 
                   alt={initiative.title}
                   width={600}
@@ -66,7 +66,7 @@ export default function InitiativesSection() {
                 </div>
                 <CardDescription className="text-foreground/70 mb-6 flex-grow">{initiative.description}</CardDescription>
                 <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                  <Link href={initiative.link}>
+                  <Link to={initiative.link}>
                     Learn More <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
