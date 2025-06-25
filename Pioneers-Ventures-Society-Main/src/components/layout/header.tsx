@@ -1,13 +1,22 @@
 
-import Link from 'next/link';
-import { Button } from '../components/ui/button';
+import * as React from 'react';
+import { Link } from "react-router-dom";
+import { Button } from '@/components/ui/button';
 import { Briefcase, UserCog } from 'lucide-react';
+// Smooth scroll utility for anchor links
+const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, selector: string) => {
+  e.preventDefault();
+  const element = document.querySelector(selector);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
-export default function Header() {
+const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" aria-label="Pioneer Ventures Society Home">
+        <Link to="/" className="flex items-center gap-2" aria-label="Pioneer Ventures Society Home">
           <Briefcase className="h-6 w-6 text-primary" />
           <span className="font-headline text-lg sm:text-xl md:text-2xl font-bold text-primary">
             <span className="sm:hidden">PVS</span>
@@ -16,36 +25,37 @@ export default function Header() {
         </Link>
         <nav className="flex items-center gap-1 md:gap-2">
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
-            <Link href="/#about">About</Link>
+        <a href="#about" onClick={(e) => handleScroll(e, '#about')}>About</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
-            <Link href="/#initiatives">Initiatives</Link>
+        <a href="#initiatives" onClick={(e) => handleScroll(e, '#initiatives')}>Initiatives</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-            <Link href="/events">Events</Link>
+            <Link to="/events">Events</Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-            <Link href="/blog">Blog</Link>
+            <Link to="/blog">Blog</Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <Link href="/resources">Resources</Link>
+            <Link to="/resources">Resources</Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <Link href="/contact">Contact</Link>
+            <Link to="/contact">Contact</Link>
           </Button>
            <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <Link href="/admin">
+            <Link to="/admin">
               <UserCog className="mr-1 h-4 w-4 sm:mr-2 sm:h-5 sm:w-5" /> Admin
             </Link>
           </Button>
           <Button variant="outline" asChild className="text-sm sm:text-base">
-            <Link href="/register">Register</Link>
+            <Link to="/register">Register</Link>
           </Button>
           <Button className="bg-accent text-accent-foreground hover:bg-accent/90 text-sm sm:text-base" asChild>
-            <Link href="/#cta">Get Involved</Link>
+        <a href="#cta" onClick={(e) => handleScroll(e, '#cta')}>Get Involved</a>
           </Button>
         </nav>
       </div>
     </header>
   );
-}
+};
+export default Header;

@@ -1,17 +1,16 @@
-
 import NewsletterForm from '@/components/common/newsletter-form';
 import SocialLinks from '@/components/common/social-links';
 import { Briefcase, Mail, MapPin, Phone } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "react-router-dom";
 
-export default function Footer() {
+const Footer = () => {
   return (
     <footer className="bg-muted/50 border-t border-border/40 py-12 text-sm">
       <div className="container mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
           
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2" aria-label="Pioneer Ventures Society Home">
+            <Link to="/" className="flex items-center gap-2" aria-label="Pioneer Ventures Society Home">
               <Briefcase className="h-7 w-7 text-primary" />
               <span className="font-headline text-xl font-bold text-primary">
                 Pioneer Ventures Society
@@ -26,10 +25,10 @@ export default function Footer() {
           <div className="md:col-span-1 lg:col-span-1">
             <h3 className="font-headline text-lg font-semibold mb-3 text-primary">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link href="#hero" className="text-muted-foreground hover:text-primary transition-colors">Home</Link></li>
-              <li><Link href="#initiatives" className="text-muted-foreground hover:text-primary transition-colors">Our Initiatives</Link></li>
-              <li><Link href="#meet-our-founders" className="text-muted-foreground hover:text-primary transition-colors">Our Founders</Link></li>
-              <li><Link href="#cta" className="text-muted-foreground hover:text-primary transition-colors">Get Involved</Link></li>
+              <li><a href="#hero" className="text-muted-foreground hover:text-primary transition-colors">Home</a></li>
+              <li><a href="#initiatives" className="text-muted-foreground hover:text-primary transition-colors">Our Initiatives</a></li>
+              <li><a href="#meet-our-founders" className="text-muted-foreground hover:text-primary transition-colors">Our Founders</a></li>
+              <li><a href="#cta" className="text-muted-foreground hover:text-primary transition-colors">Get Involved</a></li>
             </ul>
           </div>
           
@@ -56,3 +55,4 @@ export default function Footer() {
     </footer>
   );
 }
+export default Footer;
