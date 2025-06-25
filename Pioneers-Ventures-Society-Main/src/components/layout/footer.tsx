@@ -1,4 +1,3 @@
-import * as React from 'react';
 import NewsletterForm from '@/components/common/newsletter-form';
 import SocialLinks from '@/components/common/social-links';
 import { Briefcase, Mail, MapPin, Phone } from 'lucide-react';
@@ -26,10 +25,10 @@ const Footer = () => {
           <div className="md:col-span-1 lg:col-span-1">
             <h3 className="font-headline text-lg font-semibold mb-3 text-primary">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link to="#hero" className="text-muted-foreground hover:text-primary transition-colors">Home</Link></li>
-              <li><Link to="#initiatives" className="text-muted-foreground hover:text-primary transition-colors">Our Initiatives</Link></li>
-              <li><Link to="#meet-our-founders" className="text-muted-foreground hover:text-primary transition-colors">Our Founders</Link></li>
-              <li><Link to="#cta" className="text-muted-foreground hover:text-primary transition-colors">Get Involved</Link></li>
+              <li><a href="#hero" className="text-muted-foreground hover:text-primary transition-colors">Home</a></li>
+              <li><a href="#initiatives" className="text-muted-foreground hover:text-primary transition-colors">Our Initiatives</a></li>
+              <li><a href="#meet-our-founders" className="text-muted-foreground hover:text-primary transition-colors">Our Founders</a></li>
+              <li><a href="#cta" className="text-muted-foreground hover:text-primary transition-colors">Get Involved</a></li>
             </ul>
           </div>
           
