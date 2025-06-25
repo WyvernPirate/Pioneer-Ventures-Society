@@ -1,73 +1,69 @@
-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import Img from 'react-image';
-import { Lightbulb, Users, Zap, ShieldHalf, GraduationCap, Handshake, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Link } from "react-router-dom";
-import { Button } from '../ui/button';
+import { Users, ArrowRight } from 'lucide-react';
 
-const initiatives = [
+// Placeholder data for founders/members
+const members = [
   {
-    title: "Skill Development Workshops",
-    description: "Gain practical knowledge and hands-on experience through masterclasses, technical workshops, and soft-skill training sessions led by industry experts and seasoned entrepreneurs.",
-    icon: GraduationCap,
-    image: "https://placehold.co/600x400.png",
-    aiHint: "workshop education",
-    link: "/events", // Link to events or a specific workshop page
+    id: '1',
+    name: 'Phemelo Moloi',
+    role: 'Founder & Visionary',
+    image: 'https://placehold.co/400x400.png',
+    bio: 'The driving force behind PVS, with a passion for empowering the next generation of African innovators.',
+    slug: '/members/phemelo-moloi',
   },
   {
-    title: "Community Impact Challenges",
-    description: "Participate in challenges designed to solve real-world community problems through innovative solutions and social entrepreneurship, fostering a spirit of giving back.",
-    icon: ShieldHalf,
-    image: "https://placehold.co/600x400.png",
-    aiHint: "social impact",
-    link: "#", // Link to a dedicated page or section
+    id: '2',
+    name: 'Jane Doe',
+    role: 'Lead Mentor, Agri-NOVA',
+    image: 'https://placehold.co/400x400.png',
+    bio: 'An expert in agricultural technology, Jane guides our members in creating sustainable and impactful agri-tech ventures.',
+    slug: '/members/jane-doe',
   },
   {
-    title: "Leadership & Networking Forums",
-    description: "Connect with peers, mentors, and industry leaders through regular forums, networking events, and discussions aimed at cultivating leadership qualities and expanding professional networks.",
-    icon: Handshake,
-    image: "https://placehold.co/600x400.png",
-    aiHint: "networking leadership",
-    link: "/events", // Link to events page
+    id: '3',
+    name: 'John Smith',
+    role: 'Incubation Program Director',
+    image: 'https://placehold.co/400x400.png',
+    bio: 'With years of experience in venture capital, John helps our startups become investor-ready.',
+    slug: '/members/john-smith',
   },
 ];
 
-export default function InitiativesSection() {
+export default function MemberSpotlightsSection() {
   return (
-    <section id="initiatives" className="py-16 md:py-24 bg-background">
+    <section id="meet-our-founders" className="py-16 md:py-24 bg-background">
       <div className="container mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
-          <Zap className="h-12 w-12 text-accent mx-auto mb-4" />
+          <Users className="h-12 w-12 text-accent mx-auto mb-4" />
           <h2 className="font-headline text-3xl sm:text-4xl font-bold text-primary mb-4">
-            Our Key Initiatives
+            Meet Our Founders & Members
           </h2>
           <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-            We drive progress through a range of targeted programs designed to foster innovation, develop skills, and support ventures at every stage.
+            The dedicated individuals leading the charge and making an impact.
           </p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {initiatives.map((initiative, index) => (
-            <Card key={index} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+          {members.map((member) => (
+            <Card key={member.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col text-center">
               <CardHeader className="p-0">
                 <img 
-                  src={initiative.image} 
-                  alt={initiative.title}
-                  width={600}
+                  src={member.image} 
+                  alt={`Portrait of ${member.name}`}
+                  width={400}
                   height={400}
-                  className="w-full h-56 object-cover"
-                  data-ai-hint={initiative.aiHint}
+                  className="w-full h-64 object-cover"
                 />
               </CardHeader>
               <CardContent className="p-6 flex flex-col flex-grow">
-                <div className="flex items-center mb-3">
-                  <initiative.icon className="h-7 w-7 text-primary mr-3" />
-                  <CardTitle className="font-headline text-2xl text-primary">{initiative.title}</CardTitle>
-                </div>
-                <CardDescription className="text-foreground/70 mb-6 flex-grow">{initiative.description}</CardDescription>
-                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                  <Link to={initiative.link}>
-                    Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                <CardTitle className="font-headline text-2xl text-primary">{member.name}</CardTitle>
+                <p className="text-accent font-semibold mb-4">{member.role}</p>
+                <CardDescription className="text-foreground/70 mb-6 flex-grow">{member.bio}</CardDescription>
+                <Button variant="outline" asChild className="mt-auto w-fit self-center border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
+                  <Link to={member.slug}>
+                    Read Bio <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </CardContent>
