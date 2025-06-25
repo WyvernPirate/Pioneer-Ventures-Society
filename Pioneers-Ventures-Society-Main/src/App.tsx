@@ -13,7 +13,6 @@ import Footer from '@/components/layout/footer';
 
 const App = () => {
   return (
-    <>
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-grow">
@@ -30,7 +29,6 @@ const App = () => {
       </main>
       <Footer />
     </div>
-    </>
   );
 }
 
