@@ -1,57 +1,47 @@
-'use client';
-
-import { useFormState, useFormStatus } from 'react-dom';
-import { subscribeToNewsletter, type NewsletterFormState } from '@/app/actions';
+import { useState, useRef, type FormEvent } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useEffect, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
-const initialState: NewsletterFormState = {
-  message: '',
-  success: false,
-  timestamp: Date.now(),
-};
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button 
-      type="submit" 
-      aria-disabled={pending} 
-      disabled={pending} 
-      className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto"
-    >
-      {pending ? 'Subscribing...' : 'Subscribe'}
-    </Button>
-  );
-}
-
 export default function NewsletterForm() {
-  const [state, formAction] = useFormState(subscribeToNewsletter, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  useEffect(() => {
-    if (state.message) {
-      if (state.success) {
-        // Toast for success is not per spec, but good for feedback.
-        // toast({ title: "Subscribed!", description: state.message });
-        // For now, rely on the text message.
-        formRef.current?.reset(); // Reset form on success
-      } else if (state.errors && (state.errors.email || state.errors._form)) {
-        const errorMessage = state.errors.email?.[0] || state.errors._form?.[0] || state.message;
-        toast({
-          variant: "destructive",
-          title: "Subscription Failed",
-          description: errorMessage,
-        });
-      }
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setMessage('');
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+
+    try {
+      // TODO: Replace with a call to your API endpoint
+      // For example: await fetch('/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) });
+      console.log('Form submitted with email:', email);
+      
+      // Mock success for now
+      const successMessage = "Thank you for subscribing!";
+      setMessage(successMessage);
+      setIsSuccess(true);
+      toast({ title: "Subscribed!", description: successMessage });
+      formRef.current?.reset();
+
+    } catch (error) {
+      const errorMessage = "Subscription failed. Please try again.";
+      setMessage(errorMessage);
+      setIsSuccess(false);
+      toast({ variant: "destructive", title: "Error", description: errorMessage });
+    } finally {
+      setIsLoading(false);
     }
-  }, [state, toast]);
+  };
 
   return (
-    <form ref={formRef} action={formAction} className="flex flex-col gap-4 w-full max-w-md">
+    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md">
       <div className="flex flex-col sm:flex-row gap-2 items-start w-full">
         <div className="w-full sm:flex-grow">
           <Input
@@ -63,15 +53,12 @@ export default function NewsletterForm() {
             className="bg-background/80 border-primary/30 focus:ring-accent text-base"
           />
         </div>
-        <SubmitButton />
+        <Button type="submit" disabled={isLoading} className="bg-accent text-accent-foreground hover:bg-accent/90 w-full sm:w-auto">
+          {isLoading ? 'Subscribing...' : 'Subscribe'}
+        </Button>
       </div>
-      {state.message && !state.errors?.email && !state.errors?._form && (
-        <p 
-          key={state.timestamp} // Re-trigger animation/transition if message content is same
-          className={`text-sm ${state.success ? 'text-green-600' : 'text-destructive'} animate-in fade-in duration-500`}
-        >
-          {state.message}
-        </p>
+      {message && (
+        <p className={`text-sm ${isSuccess ? 'text-green-600' : 'text-destructive'}`}>{message}</p>
       )}
     </form>
   );
