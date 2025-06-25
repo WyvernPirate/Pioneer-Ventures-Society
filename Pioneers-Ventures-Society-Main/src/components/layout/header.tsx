@@ -3,6 +3,14 @@ import * as React from 'react';
 import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { Briefcase, UserCog } from 'lucide-react';
+// Smooth scroll utility for anchor links
+const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, selector: string) => {
+  e.preventDefault();
+  const element = document.querySelector(selector);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 const Header = () => {
   return (
@@ -17,10 +25,10 @@ const Header = () => {
         </Link>
         <nav className="flex items-center gap-1 md:gap-2">
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
-            <Link to="/#about">About</Link>
+        <a href="#about" onClick={(e) => handleScroll(e, '#about')}>About</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
-            <Link to="/#initiatives">Initiatives</Link>
+        <a href="#initiatives" onClick={(e) => handleScroll(e, '#initiatives')}>Initiatives</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
             <Link to="/events">Events</Link>
@@ -43,7 +51,7 @@ const Header = () => {
             <Link to="/register">Register</Link>
           </Button>
           <Button className="bg-accent text-accent-foreground hover:bg-accent/90 text-sm sm:text-base" asChild>
-            <Link to="/#cta">Get Involved</Link>
+        <a href="#cta" onClick={(e) => handleScroll(e, '#cta')}>Get Involved</a>
           </Button>
         </nav>
       </div>
