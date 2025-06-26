@@ -33,16 +33,16 @@ const Header = () => {
             <a href="#initiatives" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Initiatives</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-            <Link to="/events">Events</Link>
+           <a href="#events" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Events</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-            <Link to="/blog">Blog</Link>
+            <a href="#blog" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Blog</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <Link to="/resources">Resources</Link>
+            <a href="#resources" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Resources</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <Link to="/contact">Contact</Link>
+            <a href="#meet-our-founders" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Meet Our Founders</a>
           </Button>
            <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <Link to="/admin">
