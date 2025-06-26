@@ -18,9 +18,9 @@ const HomePage = () => {
       <CoreActivitiesSection />
       <InitiativesSection />
       <EventsSection />
+      <MemberSpotlightsSection />
       <BlogSummarySection />
       <ResourcesSummarySection />
-      <MemberSpotlightsSection />
       <CtaSection />
     </>
   );
