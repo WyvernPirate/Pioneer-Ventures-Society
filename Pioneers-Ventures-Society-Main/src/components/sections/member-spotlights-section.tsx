@@ -61,11 +61,7 @@ export default function MemberSpotlightsSection() {
                 <CardTitle className="font-headline text-2xl text-primary">{member.name}</CardTitle>
                 <p className="text-accent font-semibold mb-4">{member.role}</p>
                 <CardDescription className="text-foreground/70 mb-6 flex-grow">{member.bio}</CardDescription>
-                <Button variant="outline" asChild className="mt-auto w-fit self-center border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                  <Link to={member.slug}>
-                    Read Bio <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                <Button variant="outline" asChild className="mt-auto w-fit self-center border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><span><Link to={member.slug}>Read Bio <ArrowRight className="ml-2 h-4 w-4" /></Link></span></Button>
               </CardContent>
             </Card>
           ))}
