@@ -35,15 +35,16 @@ const Header = () => {
           <Button variant="ghost" asChild className="text-sm sm:text-base">
            <a href="#events" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Events</a>
           </Button>
+          <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
+            <a href="#meet-our-founders" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Meet Our Founders</a>
+          </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
             <a href="#blog-summary" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Blog</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <a href="#resources-summary" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Resources</a>
           </Button>
-          <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <a href="#meet-our-founders" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Meet Our Founders</a>
-          </Button>
+          
            <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <Link to="/admin">
               <UserCog className="mr-1 h-4 w-4 sm:mr-2 sm:h-5 sm:w-5" /> Admin
