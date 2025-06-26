@@ -5,7 +5,7 @@ import { ArrowRight, Rocket } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative bg-gradient-to-br from-background to-secondary/30 py-20 md:py-32 overflow-hidden">
+    <section id="hero" className="relative bg-gradient-to-br from-background to-secondary/30 py-20 md:py-20 overflow-hidden">
       <div className="absolute inset-0 opacity-5">
          {/* Subtle background pattern or image if desired */}
       </div>
