@@ -81,11 +81,7 @@ export default function EventsSection() {
                 <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-3 text-base">
                   {newestEvent.description}
                 </CardDescription>
-                <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90 text-base py-3 px-6">
-                  <Link to={newestEvent.registrationLink || '#'}>
-                    Register Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90 text-base py-3 px-6"><Link to={newestEvent.registrationLink || '#'}><span>Register Now <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
               </CardContent>
             </Card>
           </div>
@@ -115,9 +111,7 @@ export default function EventsSection() {
                     </div>
                     <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">{event.description}</CardDescription>
                      <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90">
-                      <Link to={event.registrationLink || '#'}>
-                        Register <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
+                      <Link to={event.registrationLink || '#'}><span>Register <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
                     </Button>
                   </CardContent>
                 </Card>
@@ -128,9 +122,7 @@ export default function EventsSection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg" asChild>
-            <Link to="/events">
-              View All Events <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            <Link to="/events"><span>View All Events <ArrowRight className="ml-2 h-5 w-5" /></span></Link>
           </Button>
         </div>
       </div>
