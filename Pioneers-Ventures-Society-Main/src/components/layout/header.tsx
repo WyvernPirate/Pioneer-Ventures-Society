@@ -36,10 +36,10 @@ const Header = () => {
            <a href="#events" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Events</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-            <a href="#blog" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Blog</a>
+            <a href="#blog-summary" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Blog</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <a href="#resources" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Resources</a>
+            <a href="#resources-summary" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Resources</a>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <a href="#meet-our-founders" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Meet Our Founders</a>
