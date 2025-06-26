@@ -37,7 +37,7 @@ const resourcesSummary = [
 
 export default function ResourcesSummarySection() {
   return (
-    <section id="resources-summary" className="py-16 md:py-24 bg-background">
+    <section id="resources" className="py-16 md:py-24 bg-background">
       <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
           <FolderArchive className="h-12 w-12 text-accent mx-auto mb-4" />
@@ -68,9 +68,7 @@ export default function ResourcesSummarySection() {
                     <span>Size: {resource.fileSize}</span>
                   </div>
                   <Button asChild className="mt-auto w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link to={resource.downloadLink} download target="_blank" rel="noopener noreferrer">
-                      <Download className="mr-2 h-4 w-4" /> Download
-                    </Link>
+                    <Link to={resource.downloadLink} download target="_blank" rel="noopener noreferrer"><span><Download className="mr-2 h-4 w-4" /> Download</span></Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -84,9 +82,7 @@ export default function ResourcesSummarySection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg" asChild>
-            <Link to="/resources">
-              View All Resources <Download className="ml-2 h-5 w-5" />
-            </Link>
+            <Link to="/resources"><span>View All Resources <Download className="ml-2 h-5 w-5" /></span></Link>
           </Button>
         </div>
       </div>
