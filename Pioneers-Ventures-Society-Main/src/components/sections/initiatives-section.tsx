@@ -1,6 +1,5 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import Img from 'react-image';
 import { Lightbulb, Users, Zap, ShieldHalf, GraduationCap, Handshake, ArrowRight } from 'lucide-react';
 import { Link } from "react-router-dom";
 import { Button } from '../ui/button';
