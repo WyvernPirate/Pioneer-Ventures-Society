@@ -39,9 +39,6 @@ const Header = () => {
             <Link to="/admin">
               <span className="flex items-center"><UserCog className="mr-1 h-4 w-4 sm:mr-2 sm:h-5 sm:w-5" /> Admin</span>
             </Link>
-          </Button>
-          <Button variant="outline" asChild className="text-sm sm:text-base">
-            <Link to="/register"><span>Register</span></Link>
           </Button> 
           <Button className="bg-accent text-accent-foreground hover:bg-accent/90 text-sm sm:text-base" asChild>
             <Link to="/#cta"><span>Get Involved</span></Link>

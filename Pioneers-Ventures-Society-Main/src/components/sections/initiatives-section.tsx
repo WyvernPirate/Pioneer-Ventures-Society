@@ -64,7 +64,7 @@ export default function InitiativesSection() {
                   <CardTitle className="font-headline text-2xl text-primary">{initiative.title}</CardTitle>
                 </div>
                 <CardDescription className="text-foreground/70 mb-6 flex-grow">{initiative.description}</CardDescription>
-                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><Link to={initiative.link}><span>Learn More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
+                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><Link to="/events"><span>Learn More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
               </CardContent>
             </Card>
           ))}
