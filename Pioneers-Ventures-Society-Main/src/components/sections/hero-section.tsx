@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import { Link } from "react-router-dom";
 import InspirationalQuote from '@/components/common/inspirational-qoute';
 import { ArrowRight, Rocket } from 'lucide-react';
-import Img from 'react-image';
 
 export default function HeroSection() {
   return (
