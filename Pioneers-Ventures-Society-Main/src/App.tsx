@@ -1,34 +1,30 @@
+import { Outlet, Routes, Route } from 'react-router-dom';
 import Header from '@/components/layout/header';
-import HeroSection from '@/components/sections/hero-section';
-import AboutPvsSection from '@/components/sections/about-pvs-section';
-import ValuesSection from '@/components/sections/values-section';
-import CoreActivitiesSection from '@/components/sections/core-activities-section';
-import InitiativesSection from '@/components/sections/initiatives-section';
-import BlogSummarySection from '@/components/sections/blog-summary-section';
-import EventsSection from '@/components/sections/events-section';
-import ResourcesSummarySection from '@/components/sections/resources-summary-section';
-import MemberSpotlightsSection from '@/components/sections/member-spotlights-section'; // This now serves as "Meet Our Founders"
-import  CtaSection  from '@/components/sections/cta-section';
 import Footer from '@/components/layout/footer';
+import HomePage from '@/pages/HomePage';
+import RegisterPage from '@/pages/RegisterPage';
 
-const App = () => {
+const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <main className="flex-grow">
-        <HeroSection />
-        <AboutPvsSection />
-        <ValuesSection />
-        <CoreActivitiesSection />
-        <InitiativesSection />
-        <EventsSection />
-        <BlogSummarySection />
-        <ResourcesSummarySection />
-        <MemberSpotlightsSection /> 
-        <CtaSection />
+        <Outlet /> {/* This is where nested routes will render */}
       </main>
       <Footer />
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} /> {/* Home page */}
+        <Route path="register" element={<RegisterPage />} /> {/* Register page */}
+        {/* Add other routes here */}
+      </Route>
+    </Routes>
   );
 }
 
