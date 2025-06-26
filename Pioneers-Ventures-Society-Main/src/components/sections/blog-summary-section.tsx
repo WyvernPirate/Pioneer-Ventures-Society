@@ -41,7 +41,7 @@ const otherPosts = blogPosts.slice(1, 3); // Show 2 other posts
 
 export default function BlogSummarySection() {
   return (
-    <section id="blog-summary" className="py-16 md:py-24 bg-secondary/20">
+    <section id="blog" className="py-16 md:py-24 bg-secondary/20">
       <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 md:mb-16">
           <Newspaper className="h-12 w-12 text-accent mx-auto mb-4" />
@@ -77,11 +77,7 @@ export default function BlogSummarySection() {
                 <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-4 text-base">
                   {newestPost.excerpt}
                 </CardDescription>
-                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6">
-                  <Link to={newestPost.slug}>
-                    Read More <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
+                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6"><Link to={newestPost.slug}><span>Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
               </CardContent>
             </Card>
           </div>
@@ -111,11 +107,7 @@ export default function BlogSummarySection() {
                   <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">
                     {post.excerpt}
                   </CardDescription>
-                  <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary">
-                    <Link to={post.slug}>
-                      Read More <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
+                  <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><Link to={post.slug}><span>Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
                 </CardContent>
               </Card>
             ))}
@@ -124,9 +116,7 @@ export default function BlogSummarySection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg" asChild>
-            <Link to="/blog">
-              View All Blog Posts <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
+            <Link to="/blog"><span>View All Blog Posts <ArrowRight className="ml-2 h-5 w-5" /></span></Link>
           </Button>
         </div>
       </div>
