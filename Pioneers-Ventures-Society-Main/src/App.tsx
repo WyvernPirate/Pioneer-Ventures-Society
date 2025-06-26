@@ -4,6 +4,11 @@ import Footer from '@/components/layout/footer';
 import HomePage from '@/pages/HomePage';
 import RegisterPage from '@/pages/RegisterPage';
 import BlogPage from '@/pages/BlogPage'; // Import the new BlogPage
+import EventsPage from '@/pages/EventsPage'; // Placeholder for Events page
+import InitiativesPage from '@/pages/InitiativesPage'; // Placeholder for Initiatives page
+import MembersPage from '@/pages/MembersPage'; // Placeholder for Members page
+import ResourcesPage from '@/pages/ResourcesPage'; // Placeholder for Resources page
+
 
 const Layout = () => {
   return (
@@ -24,8 +29,11 @@ const App = () => {
         <Route index element={<HomePage />} /> {/* Home page */}
         <Route path="register" element={<RegisterPage />} /> {/* Register page */}
         <Route path="blog" element={<BlogPage />} /> {/* New Blog page route */}
-        <Route path="events" element={<div>Events Page</div>} /> {/* Placeholder for Events page */}
-        <Route path="initiatives" element={<div>Initiatives Page</div>} />
+        <Route path="events" element={<EventsPage />} /> {/* Placeholder for Events page */}
+        <Route path="initiatives" element={<InitiativesPage />} />
+        <Route path="members" element={<MembersPage />} />
+        <Route path="resources" element={<ResourcesPage />} /> {/* Placeholder for Resources page */}
+
         {/* Add other routes here */}
       </Route>
     </Routes>
