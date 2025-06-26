@@ -2,7 +2,6 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, Pin, Clock, ArrowRight, CalendarCheck } from 'lucide-react';
-import Img from 'react-image';
 import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 
