@@ -4,16 +4,6 @@ import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { Briefcase, UserCog } from 'lucide-react';
 
-// Smooth scroll utility for anchor links
-const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-  e.preventDefault();
-  const targetId = href.replace(/.*#/, "");
-  const element = document.getElementById(targetId);
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
-  }
-};
-
 const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -27,34 +17,34 @@ const Header = () => {
         </Link>
         <nav className="flex items-center gap-1 md:gap-2">
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
-            <a href="#about" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>About</a>
+            <Link to="/#about"><span>About</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
-            <a href="#initiatives" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Initiatives</a>
+            <Link to="/#initiatives"><span>Initiatives</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-           <a href="#events" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Events</a>
+           <Link to="/#events"><span>Events</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <a href="#meet-our-founders" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Meet Our Founders</a>
+            <Link to="/#meet-our-founders"><span>Meet Our Founders</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
-            <a href="#blog-summary" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Blog</a>
+            <Link to="/#blog"><span>Blog</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
-            <a href="#resources-summary" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Resources</a>
+            <Link to="/#resources"><span>Resources</span></Link>
           </Button>
           
            <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <Link to="/admin">
-              <UserCog className="mr-1 h-4 w-4 sm:mr-2 sm:h-5 sm:w-5" /> Admin
+              <span className="flex items-center"><UserCog className="mr-1 h-4 w-4 sm:mr-2 sm:h-5 sm:w-5" /> Admin</span>
             </Link>
           </Button>
           <Button variant="outline" asChild className="text-sm sm:text-base">
-            <Link to="/register">Register</Link>
-          </Button>
+            <Link to="/register"><span>Register</span></Link>
+          </Button> 
           <Button className="bg-accent text-accent-foreground hover:bg-accent/90 text-sm sm:text-base" asChild>
-            <a href="#cta" onClick={(e) => handleScroll(e, e.currentTarget.getAttribute('href')!)}>Get Involved</a>
+            <Link to="/#cta"><span>Get Involved</span></Link>
           </Button>
         </nav>
       </div>
