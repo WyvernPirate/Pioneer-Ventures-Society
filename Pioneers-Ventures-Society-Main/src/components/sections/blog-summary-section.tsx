@@ -77,7 +77,7 @@ export default function BlogSummarySection() {
                 <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-4 text-base">
                   {newestPost.excerpt}
                 </CardDescription>
-                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6"><Link to={newestPost.slug}><span>Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
+                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6"><Link to={newestPost.slug}><span className="flex items-center">Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
               </CardContent>
             </Card>
           </div>
@@ -107,7 +107,7 @@ export default function BlogSummarySection() {
                   <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">
                     {post.excerpt}
                   </CardDescription>
-                  <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><Link to={post.slug}><span>Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
+                  <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><Link to={post.slug}><span className="flex items-center">Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
                 </CardContent>
               </Card>
             ))}
@@ -116,7 +116,7 @@ export default function BlogSummarySection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg" asChild>
-            <Link to="/blog"><span>View All Blog Posts <ArrowRight className="ml-2 h-5 w-5" /></span></Link>
+            <Link to="/blog"><span className="flex items-center">View All Blog Posts <ArrowRight className="ml-2 h-5 w-5" /></span></Link>
           </Button>
         </div>
       </div>
