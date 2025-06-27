@@ -1,5 +1,8 @@
-import Header from '@/components/layout/header';
-import Footer from '@/components/layout/footer';
+import { useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom'; // Use react-router-dom's Link
+import { Newspaper, ArrowRight } from 'lucide-react';
 
 export default function BlogPage() {
   return (
