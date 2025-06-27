@@ -68,7 +68,7 @@ export default function ResourcesSummarySection() {
                     <span>Size: {resource.fileSize}</span>
                   </div>
                   <Button asChild className="mt-auto w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Link to={resource.downloadLink} download target="_blank" rel="noopener noreferrer"><span><Download className="mr-2 h-4 w-4" /> Download</span></Link>
+                    <Link to={resource.downloadLink} download target="_blank" rel="noopener noreferrer"><span className="flex items-center"><Download className="mr-2 h-4 w-4" /> Download</span></Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -82,7 +82,7 @@ export default function ResourcesSummarySection() {
         
         <div className="text-center mt-8">
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg" asChild>
-            <Link to="/resources"><span>View All Resources <Download className="ml-2 h-5 w-5" /></span></Link>
+            <Link to="/resources"><span className="flex items-center">View All Resources <Download className="ml-2 h-5 w-5" /></span></Link>
           </Button>
         </div>
       </div>
