@@ -24,9 +24,9 @@ export default function HeroSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-300" asChild>
-                <Link to="/#cta"><span>Join Our Mission <ArrowRight className="ml-2 h-5 w-5" /></span></Link>
+                <Link to="/#cta"><span className="flex items-center">Join Our Mission <ArrowRight className="ml-2 h-5 w-5" /></span></Link>
               </Button>
-              <Button size="lg" variant="outline" className="shadow-lg transform hover:scale-105 transition-transform duration-300" asChild><Link to="/#initiatives"><span>Explore Initiatives</span></Link></Button>
+              <Button size="lg" variant="outline" className="shadow-lg transform hover:scale-105 transition-transform duration-300" asChild><Link to="/#initiatives"><span className="flex items-center">Explore Initiatives</span></Link></Button>
             </div>
           </div>
           <div className="relative flex justify-center items-center p-4">
