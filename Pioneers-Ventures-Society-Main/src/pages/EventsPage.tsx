@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, Pin, Clock, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Use react-router-dom's Link
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-// Placeholder data - this would typically come from a CMS or database
+// Placeholder data 
 const upcomingEvents = [
   {
     id: "summit-2024",
@@ -17,7 +17,7 @@ const upcomingEvents = [
     image: "https://placehold.co/600x400.png",
     aiHint: "conference summit",
     type: "Summit",
-    registrationLink: "/register-event/sumit-2024", // Example link
+    registrationLink: "/register-event/sumit-2024", 
   },
   {
     id: "pitch-day-nov",
@@ -125,7 +125,7 @@ export default function EventsPage() {
                       <p className="flex items-center"><Pin className="h-3 w-3 mr-1.5 text-primary/60" /> {event.location}</p>
                     </div>
                     <CardDescription className="text-foreground/60 text-sm flex-grow line-clamp-3">{event.description}</CardDescription>
-                    {/* Optionally, add a link to event summary or gallery */}
+                    {/* TODO: add a link to event summary or gallery */}
                   </CardContent>
                 </Card>
               ))}
