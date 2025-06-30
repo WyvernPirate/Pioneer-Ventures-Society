@@ -1,5 +1,4 @@
 
-import * as React from 'react';
 import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { Briefcase, UserCog } from 'lucide-react';
@@ -9,7 +8,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2" aria-label="Pioneer Ventures Society Home">
-          <Briefcase className="h-6 w-6 text-primary" />
+          <img src="src/assets/pvs_ico.png" className="h-8 w-8 sm:h-10 sm:w-10" alt="Pioneer Ventures Society Logo" />
           <span className="font-headline text-lg sm:text-xl md:text-2xl font-bold text-primary">
             <span className="sm:hidden">PVS</span>
             <span className="hidden sm:inline">Pioneer Ventures Society</span>
