@@ -33,7 +33,7 @@ This platform is designed to showcase our mission, manage community members and 
 
 ## 🔗 Live Site
 
-> **[Add your domain here when deployed, e.g., https://pvsociety.org](#)**
+> **www.pioneer-ventures-society.org**
 
 ---
 
