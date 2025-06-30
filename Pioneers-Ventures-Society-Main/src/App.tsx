@@ -9,7 +9,6 @@ import InitiativesPage from '@/pages/InitiativesPage'; // Placeholder for Initia
 import MembersPage from '@/pages/MembersPage'; // Placeholder for Members page
 import ResourcesPage from '@/pages/ResourcesPage'; // Placeholder for Resources page
 
-
 const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background">
