@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
-import { Briefcase, UserCog } from 'lucide-react';
+import { UserCog } from 'lucide-react';
 
 const Header = () => {
   return (
