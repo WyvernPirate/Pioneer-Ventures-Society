@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "pioneer-ventures-society"
-  }
+  },
+  "targets": {
+    "pioneer-ventures-society": {
+      "hosting": {
+        "main": [
+          "pioneer-ventures-society.org"
+        ],
+        "admin": [
+          "admin.pioneer-ventures-society.org"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
