@@ -1,8 +1,8 @@
 {
   "hosting": [
     {
-      "target": "main",
       "public": "dist",
+      "site": "pioneer-ventures-society",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -16,8 +16,8 @@
       ]
     },
     {
-      "target": "admin",
       "public": "src/admin",
+      "site": "admin-pioneer-ventures-society",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -25,15 +25,16 @@
       ],
       "rewrites": [
         {
-          "source": "**",
+          "source": "*src/admin*",
           "destination": "/index.html"
         }
       ]
     }
   ],
   "scripts": {
-    "deploy": "firebase deploy --only hosting:main",
-    "deploy:admin": "firebase deploy --only hosting:admin",
+    "deploy": "firebase deploy --only hosting:pioneer-ventures-society",
+    "deploy:admin": "firebase deploy --only hosting:admin-pioneer-ventures-society",
     "deploy:all": "firebase deploy"
   }
 }
+
