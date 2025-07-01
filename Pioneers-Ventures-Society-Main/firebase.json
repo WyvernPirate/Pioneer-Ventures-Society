@@ -30,5 +30,10 @@
         }
       ]
     }
-  ]
+  ],
+  "scripts": {
+    "deploy": "firebase deploy --only hosting:main",
+    "deploy:admin": "firebase deploy --only hosting:admin",
+    "deploy:all": "firebase deploy"
+  }
 }
