@@ -5,10 +5,10 @@
   "targets": {
     "pioneer-ventures-society": {
       "hosting": {
-        "main": [
+        "pioneer-ventures-society": [
           "pioneer-ventures-society.org"
         ],
-        "admin": [
+        "admin-pioneer-ventures-society": [
           "admin.pioneer-ventures-society.org"
         ]
       }
