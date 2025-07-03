@@ -9,7 +9,8 @@ import AdminMembersPage from './members/page.tsx'
 import AdminRegistrationsPage from './registrations/page.tsx'
 import AdminDocumentsPage from './documents/page.tsx'
 
-import '../index.css' // Share the main CSS file
+import '@/lib/firebase'; // Initialize Firebase
+import '@/index.css' // Share the main CSS file
 
 const router = createBrowserRouter([
   {
