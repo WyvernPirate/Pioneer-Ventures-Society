@@ -16,8 +16,8 @@
       ]
     },
     {
-      "public": "src/admin",
-      "site": "admin-pioneer-ventures-society",
+      "public": "dist",
+      "site": "pioneer-ventures-society-admin",
       "ignore": [
         "firebase.json",
         "**/.*",
@@ -25,16 +25,10 @@
       ],
       "rewrites": [
         {
-          "source": "*src/admin*",
-          "destination": "/index.html"
+          "source": "**",
+          "destination": "/admin.html"
         }
       ]
     }
-  ],
-  "scripts": {
-    "deploy": "firebase deploy --only hosting:pioneer-ventures-society",
-    "deploy:admin": "firebase deploy --only hosting:admin-pioneer-ventures-society",
-    "deploy:all": "firebase deploy"
-  }
+  ]
 }
-

@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 export default function AdminDashboardPage() {
   const quickLinks = [
-    { title: 'Manage Events', href: '/admin/events', icon: CalendarDays, description: 'Add, edit, or delete events.' },
-    { title: 'Manage Blog Posts', href: '/admin/blog', icon: Newspaper, description: 'Create and update news articles.' },
-    { title: 'View Members', href: '/admin/members', icon: Users, description: 'Access the member directory.' },
-    { title: 'Site Settings', href: '/admin/site-content', icon: Settings, description: 'Update static site content.' },
+    { title: 'Manage Events', href: '/events', icon: CalendarDays, description: 'Add, edit, or delete events.' },
+    { title: 'Manage Blog Posts', href: '/blog', icon: Newspaper, description: 'Create and update news articles.' },
+    { title: 'View Members', href: '/members', icon: Users, description: 'Access the member directory.' },
+    { title: 'Site Settings', href: '/site-content', icon: Settings, description: 'Update static site content.' },
   ];
 
   return (
