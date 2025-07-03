@@ -5,7 +5,6 @@ import { z } from 'zod';
 import { db, storage } from '@/lib/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, serverTimestamp, query, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { revalidatePath } from 'next/cache';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
@@ -178,5 +177,11 @@ export async function getPvsDocuments(): Promise<PvsDocument[]> {
     console.error("Error fetching documents: ", error);
     return [];
   }
+}
+// In Next.js 13+ with app directory, you can use the following import:
+
+function revalidatePath(path: string) {
+    // Invalidate the cache for the given path so that it gets re-fetched on next request
+    return nextRevalidatePath(path);
 }
 
