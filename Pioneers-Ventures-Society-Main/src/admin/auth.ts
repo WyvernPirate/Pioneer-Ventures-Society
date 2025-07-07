@@ -1,5 +1,5 @@
 import { auth } from '@/lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 
 /**
  * Returns a promise that resolves with the current user, or null if not logged in.
