@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Outlet, redirect } from 'react-router-dom'
 import AdminLayout from './layout.tsx'
 import AdminDashboardPage from './admin-portal.tsx'
 import AdminEventsPage from './events/page.tsx'
@@ -9,15 +9,31 @@ import AdminMembersPage from './members/page.tsx'
 import AdminSiteContentPage from './site-content/page.tsx'
 import AdminRegistrationsPage from './registrations/page.tsx'
 import AdminDocumentsPage from './documents/page.tsx'
+import LoginPage from './LoginPage.tsx'
+import { getCurrentUser } from './auth.ts'
 
 import '@/lib/firebase'; // Initialize Firebase
 import '@/index.css' // Share the main CSS file
+
+/**
+ * A loader function to protect routes.
+ * If the user is not authenticated, it redirects to the login page.
+ */
+const protectedLoader = async () => {
+  const user = await getCurrentUser();
+  if (!user) {
+    // The user is not logged in, redirect them to the login page.
+    return redirect('/login');
+  }
+  return { user }; // Pass user data to the route component
+};
 
 const router = createBrowserRouter(
   [
     {
       path: '/',
-      element: <AdminLayout><Outlet /></AdminLayout>,
+      element: <AdminLayout><Outlet /></AdminLayout>, // This is the protected layout
+      loader: protectedLoader,
       children: [
         { index: true, element: <AdminDashboardPage /> },
         { path: 'events', element: <AdminEventsPage /> },
@@ -28,6 +44,10 @@ const router = createBrowserRouter(
         { path: 'documents', element: <AdminDocumentsPage /> },
         // TODO: Add routes for 'site-content' etc.
       ],
+    },
+    {
+      path: '/login',
+      element: <LoginPage />,
     },
   ],
   { basename: '/admin' }
