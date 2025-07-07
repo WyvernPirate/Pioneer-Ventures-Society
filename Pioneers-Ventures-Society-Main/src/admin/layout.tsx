@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   SidebarProvider,
   Sidebar,
@@ -13,10 +13,24 @@ import {
   SidebarFooter,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, ExternalLink, Home, CalendarDays } from 'lucide-react';
+import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, ExternalLink, Home, CalendarDays, LogOut } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
+import { auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      // The protectedLoader will automatically redirect to /login
+      navigate('/');
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
   return (
     <SidebarProvider defaultOpen>
       <Sidebar>
@@ -104,6 +118,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </SidebarContent>
         <SidebarFooter className="p-2">
           <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="Sign Out" onClick={handleSignOut}>
+                <LogOut />
+                Sign Out
+              </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <a
                 href="https://pioneer-ventures-society.org"
