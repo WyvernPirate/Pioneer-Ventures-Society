@@ -32,7 +32,9 @@ const App = () => {
         <Route path="initiatives" element={<InitiativesPage />} />
         <Route path="members" element={<MembersPage />} />
         <Route path="resources" element={<ResourcesPage />} /> 
-        {/* Add other routes here */}
+        {/* Remove admin routes - they should only be accessible on admin subdomain */}
+        {/* 404 handler for any other routes */}
+        <Route path="*" element={<div className="text-center p-8"><h1 className="text-4xl">404 - Page Not Found</h1></div>} />
       </Route>
     </Routes>
   );
