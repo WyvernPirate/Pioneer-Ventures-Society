@@ -1,10 +1,22 @@
-
+import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Users } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
+
+interface Member {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export default function AdminMembersPage() {
+  const [members, setMembers] = useState<Member[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-primary flex items-center">
