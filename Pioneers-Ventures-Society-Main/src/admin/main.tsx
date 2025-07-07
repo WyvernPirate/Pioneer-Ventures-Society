@@ -48,7 +48,10 @@ const router = createBrowserRouter(
       path: '/login',
       element: <LoginPage />,
     },
-  ]
+  ],
+  {
+    basename: '/admin'
+  }
 )
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
