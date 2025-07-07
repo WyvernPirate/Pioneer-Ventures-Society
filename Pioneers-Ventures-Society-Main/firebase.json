@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "public": "dist",
+      "public": "dist-main",
       "site": "pioneer-ventures-society",
       "ignore": [
         "firebase.json",
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "public": "dist",
+      "public": "dist-admin",
       "site": "pioneer-ventures-society-admin",
       "ignore": [
         "firebase.json",
