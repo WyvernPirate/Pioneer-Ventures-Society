@@ -13,7 +13,7 @@ import LoginPage from './LoginPage.tsx'
 import { getCurrentUser } from './auth.ts'
 
 import '@/lib/firebase'; // Initialize Firebase
-import '@/index.css' // Share the main CSS file
+import '@/index.css' 
 
 /**
  * A loader function to protect routes.
@@ -42,15 +42,13 @@ const router = createBrowserRouter(
         { path: 'registrations', element: <AdminRegistrationsPage /> },
         { path: 'site-content', element: <AdminSiteContentPage /> },
         { path: 'documents', element: <AdminDocumentsPage /> },
-        // TODO: Add routes for 'site-content' etc.
       ],
     },
     {
       path: '/login',
       element: <LoginPage />,
     },
-  ],
-  { basename: '/admin' }
+  ]
 )
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
