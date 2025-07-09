@@ -10,14 +10,20 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
+  // Set base path for admin subdomain
+  base: './', // Use relative paths for better subdomain/subfolder deployment
   build: {
-    outDir: 'dist-admin',
-    emptyOutDir: true,
     rollupOptions: {
       input: {
         admin: resolve(__dirname, 'admin/index.html'),
       },
     },
-    
+    outDir: 'dist-admin',
+    // Ensure assets are referenced correctly
+    assetsDir: 'assets',
+  },
+  // Define environment variables
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
   },
 })
