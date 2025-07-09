@@ -20,7 +20,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate('/'); // Redirect to admin dashboard on success
+      navigate('/dashboard'); // Redirect to admin dashboard on success
     } catch (err) {
       // Firebase errors have a 'code' property, but it's not on the base Error type
       const errorWithCode = err as { code?: string; message: string };

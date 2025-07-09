@@ -24,8 +24,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      // The protectedLoader will automatically redirect to /login
-      navigate('/');
+      // Redirect to login page after sign out
+      navigate('/login');
     } catch (error) {
       console.error("Error signing out: ", error);
     }
@@ -35,7 +35,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <SidebarProvider defaultOpen>
       <Sidebar>
         <SidebarHeader className="p-4">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/dashboard" className="flex items-center gap-2">
             <Briefcase className="h-6 w-6 text-sidebar-primary" />
             <span className="font-semibold text-lg text-sidebar-primary">PVS Admin Portal</span>
           </Link>
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <SidebarContent className="flex-1 p-2">
           <SidebarMenu>
             <SidebarMenuItem>
-              <NavLink to="." end>
+              <NavLink to="/dashboard" end>
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="Dashboard" className={isActive ? "active" : ""}>
                     <LayoutDashboard />
@@ -54,7 +54,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </SidebarMenuItem>
             <SidebarSeparator />
             <SidebarMenuItem>
-              <NavLink to="/events">
+              <NavLink to="/dashboard/events">
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="Manage Events" className={isActive ? "active" : ""}>
                     <CalendarDays /> 
@@ -64,7 +64,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </NavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/blog">
+              <NavLink to="/dashboard/blog">
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="Manage Blog Posts" className={isActive ? "active" : ""}>
                     <Newspaper />
@@ -74,7 +74,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </NavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/members">
+              <NavLink to="/dashboard/members">
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="Manage Members" className={isActive ? "active" : ""}>
                     <Users />
@@ -84,7 +84,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </NavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/registrations">
+              <NavLink to="/dashboard/registrations">
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="View Registrations" className={isActive ? "active" : ""}>
                     <ListChecks />
@@ -95,7 +95,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </SidebarMenuItem>
             <SidebarSeparator />
             <SidebarMenuItem>
-              <NavLink to="/site-content">
+              <NavLink to="/dashboard/site-content">
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="Edit Site Content" className={isActive ? "active" : ""}>
                     <Settings />
@@ -105,7 +105,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </NavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/documents">
+              <NavLink to="/dashboard/documents">
                 {({ isActive }) => (
                   <SidebarMenuButton tooltip="Manage Documents" className={isActive ? "active" : ""}>
                     <FileText />
@@ -145,7 +145,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <SidebarInset className="bg-background text-foreground">
         <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-sm md:hidden">
           <SidebarTrigger />
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/dashboard" className="flex items-center gap-2">
              <Briefcase className="h-5 w-5 text-primary" />
             <span className="font-semibold text-md text-primary">PVS Admin</span>
           </Link>

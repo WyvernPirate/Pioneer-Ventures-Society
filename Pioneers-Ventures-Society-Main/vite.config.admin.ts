@@ -13,14 +13,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
         admin: resolve(__dirname, 'admin/index.html'),
       },
     },
-    outDir: 'dist',
-  },
-  // Add this to handle the different builds
-  define: {
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    outDir: 'dist-admin',
   },
 })
