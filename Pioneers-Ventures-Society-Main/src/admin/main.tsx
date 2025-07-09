@@ -28,31 +28,45 @@ const protectedLoader = async () => {
   return { user }; // Pass user data to the route component
 };
 
-const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      element: <AdminLayout><Outlet /></AdminLayout>, // This is the protected layout
-      loader: protectedLoader,
-      children: [
-        { index: true, element: <AdminDashboardPage /> },
-        { path: 'events', element: <AdminEventsPage /> },
-        { path: 'blog', element: <AdminBlogPage /> },
-        { path: 'members', element: <AdminMembersPage /> },
-        { path: 'registrations', element: <AdminRegistrationsPage /> },
-        { path: 'site-content', element: <AdminSiteContentPage /> },
-        { path: 'documents', element: <AdminDocumentsPage /> },
-      ],
-    },
-    {
-      path: '/login',
-      element: <LoginPage />,
-    },
-  ],
-  {
-    basename: '/admin'
+/**
+ * A loader for the login page.
+ * If the user is already authenticated, redirect to dashboard.
+ */
+const loginLoader = async () => {
+  const user = await getCurrentUser();
+  if (user) {
+    // User is already logged in, redirect to dashboard
+    return redirect('/dashboard');
   }
-)
+  return null;
+};
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LoginPage />,
+    loader: loginLoader,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+    loader: loginLoader,
+  },
+  {
+    path: '/dashboard',
+    element: <AdminLayout><Outlet /></AdminLayout>,
+    loader: protectedLoader,
+    children: [
+      { index: true, element: <AdminDashboardPage /> },
+      { path: 'events', element: <AdminEventsPage /> },
+      { path: 'blog', element: <AdminBlogPage /> },
+      { path: 'members', element: <AdminMembersPage /> },
+      { path: 'registrations', element: <AdminRegistrationsPage /> },
+      { path: 'site-content', element: <AdminSiteContentPage /> },
+      { path: 'documents', element: <AdminDocumentsPage /> },
+    ],
+  },
+])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
