@@ -11,11 +11,13 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: 'dist-admin',
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         admin: resolve(__dirname, 'admin/index.html'),
       },
     },
-    outDir: 'dist-admin',
+    
   },
 })
