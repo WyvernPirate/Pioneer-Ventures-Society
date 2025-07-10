@@ -13,6 +13,7 @@ import LoginPage from './LoginPage.tsx'
 import { getCurrentUser } from './auth.ts'
 import EditEventPage from './events/EditEventPage.tsx'
 import EditPostPage from './blog/EditPostPage.tsx'
+import EditMemberPage from './members/EditMemberPage.tsx'
 
 import '@/lib/firebase'; // Initialize Firebase
 import '@/index.css' 
@@ -65,6 +66,7 @@ const router = createBrowserRouter([
       { path: 'blog', element: <AdminBlogPage /> },
       { path: 'blog/edit/:postId', element: <EditPostPage /> },
       { path: 'members', element: <AdminMembersPage /> },
+      { path: 'members/edit/:memberId', element: <EditMemberPage /> },
       { path: 'registrations', element: <AdminRegistrationsPage /> },
       { path: 'site-content', element: <AdminSiteContentPage /> },
       { path: 'documents', element: <AdminDocumentsPage /> },
