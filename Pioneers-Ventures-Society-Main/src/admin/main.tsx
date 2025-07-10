@@ -11,6 +11,7 @@ import AdminRegistrationsPage from './registrations/page.tsx'
 import AdminDocumentsPage from './documents/page.tsx'
 import LoginPage from './LoginPage.tsx'
 import { getCurrentUser } from './auth.ts'
+import EditEventPage from './events/EditEventPage.tsx'
 
 import '@/lib/firebase'; // Initialize Firebase
 import '@/index.css' 
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <AdminDashboardPage /> },
       { path: 'events', element: <AdminEventsPage /> },
+      { path: 'events/edit/:eventId', element: <EditEventPage /> },
       { path: 'blog', element: <AdminBlogPage /> },
       { path: 'members', element: <AdminMembersPage /> },
       { path: 'registrations', element: <AdminRegistrationsPage /> },
