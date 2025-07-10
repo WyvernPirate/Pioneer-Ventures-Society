@@ -1,9 +1,11 @@
 import { useEffect, useState, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Users, Loader2, AlertCircle, Trash2 } from 'lucide-react';
+import { Users, Loader2, AlertCircle, Trash2, PlusCircle, Pencil } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { getFirestore, collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { AddMemberForm } from './AddMemberForm';
 import { DeleteMemberDialog } from '../../components/ui/DeleteMemberDialog';
 
 interface Member {
@@ -54,10 +56,17 @@ export default function AdminMembersPage() {
   
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-primary flex items-center">
-        <Users className="mr-3 h-8 w-8 text-accent" />
-        Manage Members
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-primary flex items-center">
+          <Users className="mr-3 h-8 w-8 text-accent" />
+          Manage Members
+        </h1>
+        <AddMemberForm onMemberAdded={() => setRefreshKey(prev => prev + 1)}>
+          <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <PlusCircle className="mr-2 h-5 w-5" /> Add New Member
+          </Button>
+        </AddMemberForm>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Member Directory</CardTitle>
@@ -83,8 +92,9 @@ export default function AdminMembersPage() {
                       <p className="text-sm text-muted-foreground">{member.email}</p>
                     </div>
                     <div className="space-x-2">
-                      {/* TODO: Create a member detail view page */}
-                      <Button variant="outline" size="sm" disabled>View</Button>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link to={`/dashboard/members/edit/${member.id}`}><Pencil className="h-4 w-4" /></Link>
+                      </Button>
                       <DeleteMemberDialog
                         memberId={member.id}
                         memberName={member.name}
