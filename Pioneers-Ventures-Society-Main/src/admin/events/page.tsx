@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { CalendarDays, PlusCircle, AlertCircle, Loader2, Pencil, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
+import { AddEventForm } from './AddEventForm';
+import { DeleteEventDialog } from '../../components/ui/DeleteEventDialog';
 
 // Define the structure of an Event object from Firestore
 interface Event {
@@ -18,9 +20,11 @@ export default function AdminEventsPage() {
   const [pastEvents, setPastEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchEvents = async () => {
+      // Reset states on refetch
       setLoading(true);
       setError(null);
       const db = getFirestore();
@@ -58,7 +62,7 @@ export default function AdminEventsPage() {
     };
 
     fetchEvents();
-  }, []);
+  }, [refreshKey]);
 
   const formatDate = (timestamp: Timestamp) => {
     return timestamp.toDate().toLocaleDateString('en-US', {
@@ -85,10 +89,13 @@ export default function AdminEventsPage() {
                 {/* TODO: Link to an edit page */}
                 <Link to={`/dashboard/events/edit/${event.id}`}><Pencil className="h-4 w-4" /></Link>
               </Button>
-              <Button variant="destructive" size="sm" onClick={() => alert(`Delete action for ${event.id} not implemented.`)}>
-                {/* TODO: Implement delete functionality */}
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              <DeleteEventDialog
+                eventId={event.id}
+                eventName={event.title}
+                onEventDeleted={() => setRefreshKey(prev => prev + 1)}
+              >
+                <Button variant="destructive" size="sm"><Trash2 className="h-4 w-4" /></Button>
+              </DeleteEventDialog>
             </div>
           </div>
         ))}
@@ -103,10 +110,11 @@ export default function AdminEventsPage() {
           <CalendarDays className="mr-3 h-8 w-8 text-accent" />
           Manage Events
         </h1>
-        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-          {/* TODO: Link to a "new event" form page */}
-          <Link to="/dashboard/events/new"><PlusCircle className="mr-2 h-5 w-5" /> Add New Event</Link>
-        </Button>
+        <AddEventForm onEventAdded={() => setRefreshKey(prev => prev + 1)}>
+          <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <PlusCircle className="mr-2 h-5 w-5" /> Add New Event
+          </Button>
+        </AddEventForm>
       </div>
 
       {loading && <div className="flex justify-center items-center py-10"><Loader2 className="h-8 w-8 animate-spin text-primary" /><p className="ml-3 text-muted-foreground">Loading Events...</p></div>}
