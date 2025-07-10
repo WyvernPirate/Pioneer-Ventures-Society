@@ -30,10 +30,17 @@ export default function MemberSpotlightsSection() {
         // Fetch up to 3 members marked for the spotlight
         const q = query(membersCollection, where('spotlight', '==', true), orderBy('name', 'asc'), limit(3));
         const memberSnapshot = await getDocs(q);
-        const memberList = memberSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as Member));
+        const memberList = memberSnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name || 'No Name Provided',
+            role: data.role || 'Member',
+            bio: data.bio || 'An esteemed member of the Pioneer Ventures Society.',
+            image: data.image || 'https://placehold.co/400x400.png',
+            aiHint: data.aiHint,
+          } as Member;
+        });
         setMembers(memberList);
       } catch (err) {
         console.error("Error fetching spotlight members:", err);
