@@ -2,8 +2,13 @@ import { Button } from '@/components/ui/button';
 import { Link } from "react-router-dom";
 import InspirationalQuote from '@/components/common/inspirational-qoute';
 import { ArrowRight, Rocket } from 'lucide-react';
+import type { HeroContent } from '@/types/site-content';
 
-export default function HeroSection() {
+export default function HeroSection({
+  headline = "Pioneering Ventures, Shaping Futures",
+  subheadline = "Pioneer Ventures Society is dedicated to fostering a vibrant ecosystem for innovation, empowering entrepreneurs, and driving impactful change. Join us in building the next generation of groundbreaking ventures.",
+  imageUrl = "https://placehold.co/600x500.png"
+}: Partial<HeroContent>) {
   return (
     <section id="hero" className="relative bg-gradient-to-br from-background to-secondary/30 py-20 md:py-20 overflow-hidden">
       <div className="absolute inset-0 opacity-5">
@@ -16,11 +21,11 @@ export default function HeroSection() {
               <Rocket className="h-4 w-4 mr-2" />
               Igniting Innovation
             </div>
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary leading-tight mb-6">
-              Pioneering Ventures, Shaping Futures
+            <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary leading-tight mb-6" style={{ minHeight: '10rem' }}>
+              {headline}
             </h1>
-            <p className="text-lg md:text-xl text-foreground/80 mb-8 max-w-xl mx-auto md:mx-0">
-              Pioneer Ventures Society is dedicated to fostering a vibrant ecosystem for innovation, empowering entrepreneurs, and driving impactful change. Join us in building the next generation of groundbreaking ventures.
+            <p className="text-lg md:text-xl text-foreground/80 mb-8 max-w-xl mx-auto md:mx-0" style={{ minHeight: '8rem' }}>
+              {subheadline}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg transform hover:scale-105 transition-transform duration-300" asChild>
@@ -31,7 +36,7 @@ export default function HeroSection() {
           </div>
           <div className="relative flex justify-center items-center p-4">
             <img 
-              src="https://placehold.co/600x500.png" 
+              src={imageUrl}
               alt="Abstract representation of innovation and collaboration"
               width={600}
               height={500}

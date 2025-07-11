@@ -9,6 +9,8 @@ export default function AdminDashboardPage() {
     { title: 'Manage Events', href: '/dashboard/events', icon: CalendarDays, description: 'Add, edit, or delete events.' },
     { title: 'Manage Blog Posts', href: '/dashboard/blog', icon: Newspaper, description: 'Create and update news articles.' },
     { title: 'View Members', href: '/dashboard/members', icon: Users, description: 'Access the member directory.' },
+    { title: 'View Registrations', href: '/dashboard/registrations', icon: ListChecks, description: 'See event and member sign-ups.' },
+    { title: 'Manage Documents', href: '/dashboard/documents', icon: FileText, description: 'Upload and manage downloadable resources.' },
     { title: 'Site Settings', href: '/dashboard/site-content', icon: Settings, description: 'Update static site content.' },
   ];
 
