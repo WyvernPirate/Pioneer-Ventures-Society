@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, ComponentProps } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   SidebarProvider,
@@ -17,6 +17,25 @@ import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, Fil
 import { Toaster } from '@/components/ui/toaster';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
+
+type SidebarNavLinkProps = {
+  to: string;
+  tooltip: string;
+  children: ReactNode;
+  end?: boolean;
+};
+
+function SidebarNavLink({ to, tooltip, children, end = false }: SidebarNavLinkProps) {
+  return (
+    <NavLink to={to} end={end}>
+      {({ isActive }) => (
+        <SidebarMenuButton tooltip={tooltip} className={isActive ? "active" : ""}>
+          {children}
+        </SidebarMenuButton>
+      )}
+    </NavLink>
+  );
+}
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
@@ -43,76 +62,48 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <SidebarContent className="flex-1 p-2">
           <SidebarMenu>
             <SidebarMenuItem>
-              <NavLink to="/dashboard" end>
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="Dashboard" className={isActive ? "active" : ""}>
-                    <LayoutDashboard />
-                    Dashboard
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard" tooltip="Dashboard" end>
+                <LayoutDashboard />
+                Dashboard
+              </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarSeparator />
             <SidebarMenuItem>
-              <NavLink to="/dashboard/events">
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="Manage Events" className={isActive ? "active" : ""}>
-                    <CalendarDays /> 
-                    Events
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard/events" tooltip="Manage Events">
+                <CalendarDays /> 
+                Events
+              </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/dashboard/blog">
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="Manage Blog Posts" className={isActive ? "active" : ""}>
-                    <Newspaper />
-                    Blog/Posts
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard/blog" tooltip="Manage Blog Posts">
+                <Newspaper />
+                Blog/Posts
+              </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/dashboard/members">
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="Manage Members" className={isActive ? "active" : ""}>
-                    <Users />
-                    Members
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard/members" tooltip="Manage Members">
+                <Users />
+                Members
+              </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/dashboard/registrations">
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="View Registrations" className={isActive ? "active" : ""}>
-                    <ListChecks />
-                    Registrations
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard/registrations" tooltip="View Registrations">
+                <ListChecks />
+                Registrations
+              </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarSeparator />
             <SidebarMenuItem>
-              <NavLink to="/dashboard/site-content">
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="Edit Site Content" className={isActive ? "active" : ""}>
-                    <Settings />
-                    Site Content
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard/site-content" tooltip="Edit Site Content">
+                <Settings />
+                Site Content
+              </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <NavLink to="/dashboard/documents">
-                {({ isActive }) => (
-                  <SidebarMenuButton tooltip="Manage Documents" className={isActive ? "active" : ""}>
-                    <FileText />
-                    Documents
-                  </SidebarMenuButton>
-                )}
-              </NavLink>
+              <SidebarNavLink to="/dashboard/documents" tooltip="Manage Documents">
+                <FileText />
+                Documents
+              </SidebarNavLink>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
