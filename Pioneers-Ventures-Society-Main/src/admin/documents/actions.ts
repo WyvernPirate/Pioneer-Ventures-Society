@@ -182,6 +182,6 @@ export async function getPvsDocuments(): Promise<PvsDocument[]> {
 
 function revalidatePath(path: string) {
     // Invalidate the cache for the given path so that it gets re-fetched on next request
-    return nextRevalidatePath(path);
+    return revalidatePath(path);
 }
 
