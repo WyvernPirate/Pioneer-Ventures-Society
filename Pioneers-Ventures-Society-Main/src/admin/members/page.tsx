@@ -7,12 +7,7 @@ import { getFirestore, collection, getDocs, query, orderBy } from 'firebase/fire
 import { Link } from 'react-router-dom';
 import { AddMemberForm } from './AddMemberForm';
 import { DeleteMemberDialog } from '../../components/ui/DeleteMemberDialog';
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-}
+import { type Member } from '@/types';
 
 export default function AdminMembersPage() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -86,10 +81,17 @@ export default function AdminMembersPage() {
             <div className="space-y-3">
               {filteredMembers.length > 0 ? (
                 filteredMembers.map(member => (
-                  <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg bg-background hover:bg-accent/50 transition-colors">
-                    <div>
-                      <p className="font-semibold">{member.name}</p>
-                      <p className="text-sm text-muted-foreground">{member.email}</p>
+                  <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg bg-card hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={member.image || 'https://placehold.co/400x400.png'}
+                        alt={member.name}
+                        className="h-12 w-12 rounded-full object-cover border"
+                      />
+                      <div>
+                        <p className="font-semibold">{member.name}</p>
+                        <p className="text-sm text-muted-foreground">{member.email}</p>
+                      </div>
                     </div>
                     <div className="space-x-2">
                       <Button variant="outline" size="sm" asChild>

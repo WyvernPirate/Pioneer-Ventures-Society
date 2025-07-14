@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getFirestore, doc, getDoc, updateDoc,type DocumentData } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc, type DocumentData } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,15 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-
-interface MemberData {
-  name: string;
-  email: string;
-  role: string;
-  bio: string;
-  image: string;
-  spotlight: boolean;
-}
+import { type Member } from '@/types';
 
 export default function EditMemberPage() {
   const { memberId } = useParams<{ memberId: string }>();
@@ -26,7 +19,7 @@ export default function EditMemberPage() {
   const [status, setStatus] = useState<{ loading: boolean; submitting: boolean; error: string | null }>({
     loading: true, submitting: false, error: null
   });
-  const [formData, setFormData] = useState<MemberData>({
+  const [formData, setFormData] = useState<Omit<Member, 'id'>>({
     name: '',
     email: '',
     role: '',
@@ -34,6 +27,7 @@ export default function EditMemberPage() {
     image: '',
     spotlight: false,
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (!memberId) {
@@ -92,8 +86,35 @@ export default function EditMemberPage() {
 
     try {
       const db = getFirestore();
+      const storage = getStorage();
+      let imageUrl = formData.image;
+      const oldImageUrl = formData.image; // Store old image URL for deletion
+
+      if (imageFile) {
+        // 1. Upload new image
+        const storageRef = ref(storage, `members/pics/${Date.now()}-${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+
+        // 2. Delete old image from storage if it's not a placeholder
+        if (oldImageUrl && !oldImageUrl.includes('placehold.co')) {
+          try {
+            const oldImageRef = ref(storage, oldImageUrl);
+            await deleteObject(oldImageRef);
+          } catch (deleteError: any) {
+            // Log error but don't block the update.
+            // If the old file doesn't exist, that's fine.
+            if (deleteError.code !== 'storage/object-not-found') {
+              console.error("Failed to delete old member image:", deleteError);
+            }
+          }
+        }
+      }
+
       const memberDocRef = doc(db, 'members', memberId);
-      await updateDoc(memberDocRef, { ...formData });
+      const updatedData = { ...formData, image: imageUrl };
+
+      await updateDoc(memberDocRef, updatedData);
       // Navigate back to the main members list on success
       navigate('/dashboard/members');
     } catch (err) {
@@ -138,7 +159,28 @@ export default function EditMemberPage() {
           <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="email" className="text-right">Email</Label><Input id="email" type="email" value={formData.email} onChange={handleInputChange} className="col-span-3" required /></div>
           <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="role" className="text-right">Role</Label><Input id="role" value={formData.role} onChange={handleInputChange} placeholder="e.g., Founder, Mentor" className="col-span-3" /></div>
           <div className="grid grid-cols-4 items-start gap-4"><Label htmlFor="bio" className="text-right pt-2">Bio</Label><Textarea id="bio" value={formData.bio} onChange={handleInputChange} className="col-span-3 min-h-[150px]" /></div>
-          <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="image" className="text-right">Image URL</Label><Input id="image" value={formData.image} onChange={handleInputChange} className="col-span-3" /></div>
+          <div className="grid grid-cols-4 items-start gap-4">
+            <Label htmlFor="image-upload" className="text-right pt-2">Profile Image</Label>
+            <div className="col-span-3">
+              <div className="flex items-center gap-4">
+                {(formData.image || imageFile) && (
+                  <img 
+                    src={imageFile ? URL.createObjectURL(imageFile) : formData.image} 
+                    alt="Member" 
+                    className="h-24 w-24 object-cover rounded-full border" 
+                  />
+                )}
+                <Input
+                  id="image-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => e.target.files && setImageFile(e.target.files[0])}
+                  className="flex-1"
+                />
+              </div>
+              {imageFile && <p className="text-sm text-muted-foreground mt-2">New image selected: {imageFile.name}</p>}
+            </div>
+          </div>
           <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="spotlight" className="text-right">Feature on Homepage</Label><Switch id="spotlight" checked={formData.spotlight} onCheckedChange={handleSwitchChange} /></div>
           {status.error && <div className="col-span-4 flex items-center p-3 bg-destructive/10 text-destructive rounded-lg text-sm"><AlertCircle className="h-4 w-4 mr-2" />{status.error}</div>}
         </div>

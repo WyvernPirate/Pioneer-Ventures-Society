@@ -27,9 +27,26 @@ const formatDate = (timestamp: Timestamp) => {
 };
 
 // Helper to create a short excerpt from full content
-const createExcerpt = (content: string, length = 150) => {
-  if (content.length <= length) return content;
-  return content.substring(0, length) + '...';
+const createExcerpt = (content: string, maxLength = 350) => {
+  if (!content) return '';
+  // First, strip markdown characters for a cleaner plain text representation.
+  const plainText = content
+    .replace(/#{1,6}\s/g, '') // Headings
+    .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
+    .replace(/(\*|_)(.*?)\1/g, '$2') // Italic
+    .replace(/`{1,3}/g, '') // Code
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
+    .replace(/>\s/g, '') // Blockquotes
+    .replace(/!\[.*?\]\(.*?\)/g, '') // Images
+    .replace(/\n/g, ' ') // Newlines
+    .trim();
+
+  if (plainText.length <= maxLength) return plainText;
+
+  const trimmedString = plainText.substring(0, maxLength);
+  // Trim to the last space to avoid cutting words in half
+  const lastSpaceIndex = trimmedString.lastIndexOf(' ');
+  return (lastSpaceIndex > 0 ? trimmedString.substring(0, lastSpaceIndex) : trimmedString) + '...';
 };
 
 export default function BlogSummarySection() {

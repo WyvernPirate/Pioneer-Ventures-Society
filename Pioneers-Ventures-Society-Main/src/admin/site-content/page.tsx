@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import type { HeroContent } from '@/types/site-content';
 
@@ -50,10 +50,23 @@ export default function AdminSiteContentPage() {
     setSaving(true);
     try {
       let imageUrl = heroData.imageUrl;
+      const oldImageUrl = heroData.imageUrl;
+
       if (heroImageFile) {
         const storageRef = ref(storage, `site-content/pic/${Date.now()}-${heroImageFile.name}`);
         await uploadBytes(storageRef, heroImageFile);
         imageUrl = await getDownloadURL(storageRef);
+
+        if (oldImageUrl) {
+          try {
+            const oldImageRef = ref(storage, oldImageUrl);
+            await deleteObject(oldImageRef);
+          } catch (deleteError: any) {
+            if (deleteError.code !== 'storage/object-not-found') {
+              console.error("Could not delete old hero image:", deleteError);
+            }
+          }
+        }
       }
 
       const updatedHeroData = { ...heroData, imageUrl };

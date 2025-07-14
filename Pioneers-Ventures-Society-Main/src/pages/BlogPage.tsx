@@ -101,20 +101,20 @@ export default function BlogPage() {
           </aside>
 
           {/* Main Content */}
-          <article className="md:col-span-3">
+          <article className="md:col-span-3 bg-card p-6 md:p-8 rounded-lg shadow-sm">
             {loading ? (
-              <Card className="p-6 md:p-8 space-y-6">
+              <div className="space-y-6">
                 <Skeleton className="h-10 w-3/4" />
                 <Skeleton className="h-6 w-1/4" />
                 <Skeleton className="w-full h-80 rounded-lg" />
                 <Skeleton className="h-6 w-full" />
                 <Skeleton className="h-6 w-full" />
                 <Skeleton className="h-6 w-5/6" />
-              </Card>
+              </div>
             ) : error ? (<p className="text-lg text-red-500 flex items-center"><AlertCircle className="mr-2"/> {error}</p>
             ) : selectedPost ? (
-              <Card className="overflow-hidden">
-                <div className="p-6 md:p-8">
+              <div className="overflow-hidden">
+                <div>
                   <h1 className="font-headline text-3xl sm:text-4xl font-bold text-primary mb-4">
                     {selectedPost.title}
                   </h1>
@@ -136,7 +136,7 @@ export default function BlogPage() {
                     <ReactMarkdown>{selectedPost.content}</ReactMarkdown>
                   </div>
                 </div>
-              </Card>
+              </div>
             ) : (
               <div className="flex items-center justify-center h-full text-muted-foreground text-lg bg-card p-8 rounded-lg">
                 <p>Select an article from the sidebar to read.</p>
