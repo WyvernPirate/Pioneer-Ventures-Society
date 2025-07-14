@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { type Member } from '@/types';
 
 interface AddMemberFormProps {
@@ -38,10 +39,12 @@ export function AddMemberForm({ onMemberAdded, children }: AddMemberFormProps) {
     error: null,
   });
   const [formData, setFormData] = useState(initialFormData);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const resetForm = () => {
     setFormData(initialFormData);
     setStatus({ submitting: false, error: null });
+    setImageFile(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,7 +58,17 @@ export function AddMemberForm({ onMemberAdded, children }: AddMemberFormProps) {
 
     try {
       const db = getFirestore();
-      await addDoc(collection(db, 'members'), formData);
+      const storage = getStorage();
+      let imageUrl = formData.image;
+
+      if (imageFile) {
+        const storageRef = ref(storage, `members/pics/${Date.now()}-${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
+      const newMemberData = { ...formData, image: imageUrl };
+      await addDoc(collection(db, 'members'), newMemberData);
       
       onMemberAdded();
       resetForm();
@@ -87,7 +100,28 @@ export function AddMemberForm({ onMemberAdded, children }: AddMemberFormProps) {
             <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="email" className="text-right">Email</Label><Input id="email" type="email" value={formData.email} onChange={handleInputChange} className="col-span-3" required /></div>
             <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="role" className="text-right">Role</Label><Input id="role" value={formData.role} onChange={handleInputChange} placeholder="e.g., Founder, Mentor" className="col-span-3" /></div>
             <div className="grid grid-cols-4 items-start gap-4"><Label htmlFor="bio" className="text-right pt-2">Bio</Label><Textarea id="bio" value={formData.bio} onChange={handleInputChange} className="col-span-3" /></div>
-            <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="image" className="text-right">Image URL</Label><Input id="image" value={formData.image} onChange={handleInputChange} className="col-span-3" /></div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="image-upload" className="text-right">Profile Image</Label>
+              <div className="col-span-3">
+                <div className="flex items-center gap-4">
+                  {(formData.image || imageFile) && (
+                    <img 
+                      src={imageFile ? URL.createObjectURL(imageFile) : formData.image} 
+                      alt="Member preview" 
+                      className="h-20 w-20 object-cover rounded-full border" 
+                    />
+                  )}
+                  <Input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => e.target.files && setImageFile(e.target.files[0])}
+                    className="flex-1"
+                  />
+                </div>
+                {imageFile && <p className="text-sm text-muted-foreground mt-2">New image selected: {imageFile.name}</p>}
+              </div>
+            </div>
             <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="spotlight" className="text-right">Feature on Homepage</Label><Switch id="spotlight" checked={formData.spotlight} onCheckedChange={(checked) => setFormData(prev => ({...prev, spotlight: checked}))} /></div>
             {status.error && <div className="col-span-4 flex items-center p-3 bg-destructive/10 text-destructive rounded-lg text-sm"><AlertCircle className="h-4 w-4 mr-2" />{status.error}</div>}
           </div>
