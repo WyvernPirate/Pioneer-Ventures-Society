@@ -7,12 +7,7 @@ import { getFirestore, collection, getDocs, query, orderBy } from 'firebase/fire
 import { Link } from 'react-router-dom';
 import { AddMemberForm } from './AddMemberForm';
 import { DeleteMemberDialog } from '../../components/ui/DeleteMemberDialog';
-
-interface Member {
-  id: string;
-  name: string;
-  email: string;
-}
+import { type Member } from '@/types';
 
 export default function AdminMembersPage() {
   const [members, setMembers] = useState<Member[]>([]);
