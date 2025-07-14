@@ -19,6 +19,7 @@ interface Event {
   aiHint?: string;
   type: string;
   registrationLink?: string;
+  featured?: boolean;
 }
 
 export default function EventsPage() {
