@@ -9,10 +9,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from '@/components/ui/textarea';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { getFirestore, collection, addDoc, Timestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { PostForm, type PostFormData } from './PostForm';
+
+export interface PostFormData {
+  title: string;
+  content: string;
+  image: string;
+  author: string;
+}
 
 interface AddPostFormProps {
   onPostAdded: () => void;
@@ -98,12 +107,35 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <PostForm
-              formData={formData}
-              onFormChange={handleInputChange}
-              imageFile={imageFile}
-              onImageFileChange={setImageFile}
-            />
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="title" className="text-right">Title</Label>
+              <Input id="title" value={formData.title} onChange={handleInputChange} className="col-span-3" required />
+            </div>
+            <div className="grid grid-cols-4 items-start gap-4">
+              <Label htmlFor="content" className="text-right pt-2">Content (Markdown)</Label>
+              <Textarea id="content" value={formData.content} onChange={handleInputChange} className="col-span-3 min-h-[250px]" placeholder="Write your blog post using Markdown..." required />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="image-upload" className="text-right">Featured Image</Label>
+              <div className="col-span-3">
+                <div className="flex items-center gap-4">
+                  {(formData.image || imageFile) && (
+                    <img 
+                      src={imageFile ? URL.createObjectURL(imageFile) : formData.image} 
+                      alt="Post preview" 
+                      className="h-20 w-32 object-cover rounded-md border" 
+                    />
+                  )}
+                  <Input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => e.target.files && setImageFile(e.target.files[0])}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+            </div>
             {error && <div className="col-span-4 flex items-center p-3 bg-destructive/10 text-destructive rounded-lg text-sm"><AlertCircle className="h-4 w-4 mr-2" />{error}</div>}
           </div>
           <DialogFooter>
