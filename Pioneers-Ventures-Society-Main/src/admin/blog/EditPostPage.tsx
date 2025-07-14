@@ -1,20 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getFirestore, doc, getDoc, updateDoc, Timestamp } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from '@/components/ui/textarea';
 import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-
-interface PostData {
-  title: string;
-  content: string;
-  image: string;
-  author: string;
-  date: Timestamp;
-}
+import { PostForm, type PostFormData } from './PostForm';
 
 export default function EditPostPage() {
   const { postId } = useParams<{ postId: string }>();
@@ -24,13 +15,10 @@ export default function EditPostPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Form state
-  const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    image: '',
-    author: '',
-  });
+  // Form state using the shared interface
+  const [formData, setFormData] = useState<PostFormData | null>(null);
+  // State for the new image file, if selected
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (!postId) {
@@ -47,13 +35,8 @@ export default function EditPostPage() {
       try {
         const docSnap = await getDoc(postDocRef);
         if (docSnap.exists()) {
-          const postData = docSnap.data() as PostData;
-          setFormData({
-            title: postData.title || '',
-            content: postData.content || '',
-            image: postData.image || '',
-            author: postData.author || 'PVS Admin',
-          });
+          // The data should conform to PostFormData
+          setFormData(docSnap.data() as PostFormData);
         } else {
           setError("Blog post not found. It may have been deleted.");
         }
@@ -69,13 +52,15 @@ export default function EditPostPage() {
   }, [postId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
+    if (!formData) return;
+    const { id, value } = e.target; // Using 'id' which matches keys in PostFormData
+    setFormData(prev => prev ? { ...prev, [id]: value } : null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!postId) {
+    // Check for formData as well, since it holds the data to be submitted
+    if (!postId || !formData) {
       setError("Cannot submit, post ID is missing.");
       return;
     }
@@ -85,10 +70,22 @@ export default function EditPostPage() {
 
     try {
       const db = getFirestore();
+      const storage = getStorage();
+      let imageUrl = formData.image;
+
+      // If a new image file was selected, upload it and get the new URL
+      if (imageFile) {
+        const storageRef = ref(storage, `blog/pics/${Date.now()}-${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
       const postDocRef = doc(db, 'blog', postId);
-      // Note: We are not updating the original post date here.
-      // You could add a `lastUpdatedAt` timestamp if needed.
-      await updateDoc(postDocRef, { ...formData });
+      
+      // Prepare data for update, including the potentially new image URL
+      const updatedData = { ...formData, image: imageUrl };
+
+      await updateDoc(postDocRef, updatedData);
       navigate('/dashboard/blog');
     } catch (err) {
       console.error("Error updating post:", err);
@@ -110,7 +107,7 @@ export default function EditPostPage() {
     );
   }
 
-  if (error) {
+  if (error || !formData) {
     return <div className="flex items-center p-4 bg-destructive/10 text-destructive rounded-lg"><AlertCircle className="h-5 w-5 mr-3" /><p>{error}</p></div>;
   }
 
@@ -121,12 +118,12 @@ export default function EditPostPage() {
         <h1 className="text-3xl font-bold text-primary">Edit Blog Post</h1>
       </div>
       <form onSubmit={handleSubmit} className="p-6 border rounded-lg bg-card">
-        <div className="grid gap-6">
-          <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="title" className="text-right">Title</Label><Input id="title" value={formData.title} onChange={handleInputChange} className="col-span-3" required /></div>
-          <div className="grid grid-cols-4 items-start gap-4"><Label htmlFor="content" className="text-right pt-2">Content</Label><Textarea id="content" value={formData.content} onChange={handleInputChange} className="col-span-3 min-h-[250px]" placeholder="Write your post content here. Markdown is supported." required /></div>
-          <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="image" className="text-right">Image URL</Label><Input id="image" value={formData.image} onChange={handleInputChange} className="col-span-3" /></div>
-          <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="author" className="text-right">Author</Label><Input id="author" value={formData.author} onChange={handleInputChange} className="col-span-3" /></div>
-        </div>
+        <PostForm
+          formData={formData}
+          onFormChange={handleInputChange}
+          imageFile={imageFile}
+          onImageFileChange={setImageFile}
+        />
         <div className="flex justify-end gap-2 pt-6">
           <Button type="button" variant="outline" onClick={() => navigate('/dashboard/blog')}>Cancel</Button>
           <Button type="submit" disabled={isSubmitting}>

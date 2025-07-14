@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { getFirestore, doc, getDoc, updateDoc,type DocumentData } from 'firebase/firestore';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,10 +22,10 @@ export default function EditMemberPage() {
   const { memberId } = useParams<{ memberId: string }>();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
+  // Consolidate component status state
+  const [status, setStatus] = useState<{ loading: boolean; submitting: boolean; error: string | null }>({
+    loading: true, submitting: false, error: null
+  });
   const [formData, setFormData] = useState<MemberData>({
     name: '',
     email: '',
@@ -37,20 +37,19 @@ export default function EditMemberPage() {
 
   useEffect(() => {
     if (!memberId) {
-      setError("Member ID is missing from URL.");
-      setLoading(false);
+      setStatus({ loading: false, submitting: false, error: "Member ID is missing from URL." });
       return;
     }
 
     const fetchMember = async () => {
-      setLoading(true);
-      setError(null);
+      setStatus({ loading: true, submitting: false, error: null });
       const db = getFirestore();
       const memberDocRef = doc(db, 'members', memberId);
       try {
         const docSnap = await getDoc(memberDocRef);
         if (docSnap.exists()) {
-          const data = docSnap.data();
+          // Type assertion for safety
+          const data = docSnap.data() as DocumentData;
           setFormData({
             name: data.name || '',
             email: data.email || '',
@@ -59,14 +58,13 @@ export default function EditMemberPage() {
             image: data.image || '',
             spotlight: data.spotlight || false,
           });
+          setStatus(prev => ({ ...prev, loading: false }));
         } else {
-          setError("Member not found. It may have been deleted.");
+          setStatus({ loading: false, submitting: false, error: "Member not found. It may have been deleted." });
         }
       } catch (err) {
         console.error("Error fetching member:", err);
-        setError("Failed to load member data. Please try again.");
-      } finally {
-        setLoading(false);
+        setStatus({ loading: false, submitting: false, error: "Failed to load member data. Please try again." });
       }
     };
 
@@ -85,27 +83,27 @@ export default function EditMemberPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!memberId) {
-      setError("Cannot submit, member ID is missing.");
+      // This check is slightly redundant due to useEffect but good for safety
+      setStatus(prev => ({ ...prev, error: "Cannot submit, member ID is missing." }));
       return;
     }
 
-    setIsSubmitting(true);
-    setError(null);
+    setStatus({ loading: false, submitting: true, error: null });
 
     try {
       const db = getFirestore();
       const memberDocRef = doc(db, 'members', memberId);
       await updateDoc(memberDocRef, { ...formData });
+      // Navigate back to the main members list on success
       navigate('/dashboard/members');
     } catch (err) {
       console.error("Error updating member:", err);
-      setError("Failed to update member. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      setStatus({ loading: false, submitting: false, error: "Failed to update member. Please try again." });
     }
   };
 
-  if (loading) {
+  // Render loading skeleton
+  if (status.loading) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-10 w-1/3" />
@@ -117,14 +115,21 @@ export default function EditMemberPage() {
     );
   }
 
-  if (error) {
-    return <div className="flex items-center p-4 bg-destructive/10 text-destructive rounded-lg"><AlertCircle className="h-5 w-5 mr-3" /><p>{error}</p></div>;
+  // Render error message
+  if (status.error && !formData.name) { // Only show full-page error if data hasn't loaded
+    return (
+      <div className="flex flex-col items-center justify-center text-center py-10">
+        <AlertCircle className="h-12 w-12 text-destructive mb-4" />
+        <p className="text-lg text-destructive mb-4">{status.error}</p>
+        <Button asChild><Link to="/dashboard/members"><ArrowLeft className="mr-2 h-4 w-4" />Back to Members</Link></Button>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" onClick={() => navigate(-1)}><ArrowLeft className="h-4 w-4" /></Button>
+        <Button variant="outline" size="icon" asChild><Link to="/dashboard/members"><ArrowLeft className="h-4 w-4" /></Link></Button>
         <h1 className="text-3xl font-bold text-primary">Edit Member</h1>
       </div>
       <form onSubmit={handleSubmit} className="p-6 border rounded-lg bg-card">
@@ -135,12 +140,12 @@ export default function EditMemberPage() {
           <div className="grid grid-cols-4 items-start gap-4"><Label htmlFor="bio" className="text-right pt-2">Bio</Label><Textarea id="bio" value={formData.bio} onChange={handleInputChange} className="col-span-3 min-h-[150px]" /></div>
           <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="image" className="text-right">Image URL</Label><Input id="image" value={formData.image} onChange={handleInputChange} className="col-span-3" /></div>
           <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="spotlight" className="text-right">Feature on Homepage</Label><Switch id="spotlight" checked={formData.spotlight} onCheckedChange={handleSwitchChange} /></div>
+          {status.error && <div className="col-span-4 flex items-center p-3 bg-destructive/10 text-destructive rounded-lg text-sm"><AlertCircle className="h-4 w-4 mr-2" />{status.error}</div>}
         </div>
-        {error && <div className="col-span-4 flex items-center p-3 mt-4 bg-destructive/10 text-destructive rounded-lg text-sm"><AlertCircle className="h-4 w-4 mr-2" />{error}</div>}
         <div className="flex justify-end gap-2 pt-6">
-          <Button type="button" variant="outline" onClick={() => navigate('/dashboard/members')}>Cancel</Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button type="button" variant="outline" onClick={() => navigate('/dashboard/members')} disabled={status.submitting}>Cancel</Button>
+          <Button type="submit" disabled={status.submitting}>
+            {status.submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save Changes
           </Button>
         </div>

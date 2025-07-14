@@ -9,11 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from '@/components/ui/textarea';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { getFirestore, collection, addDoc, Timestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { PostForm, type PostFormData } from './PostForm';
 
 interface AddPostFormProps {
   onPostAdded: () => void;
@@ -25,21 +24,25 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Form state
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState('https://placehold.co/800x400.png'); // Default placeholder
+  const initialFormData: PostFormData = {
+    title: '',
+    content: '',
+    image: 'https://placehold.co/800x400.png', // Default placeholder
+    author: 'PVS Admin',
+  };
+
+  const [formData, setFormData] = useState<PostFormData>(initialFormData);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const resetForm = () => {
-    setTitle('');
-    setContent('');
-    setImage('https://placehold.co/800x400.png');
+    setFormData(initialFormData);
+    setImageFile(null);
     setError(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !content) {
+    if (!formData.title || !formData.content) {
       setError("Post Title and Content are required.");
       return;
     }
@@ -49,12 +52,18 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
 
     try {
       const db = getFirestore();
+      const storage = getStorage();
+      let imageUrl = formData.image;
+
+      if (imageFile) {
+        const storageRef = ref(storage, `blog/pics/${Date.now()}-${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
       const newPost = {
-        title,
-        content,
-        image,
-        // In a real app, you might get the author from the logged-in user
-        author: "PVS Admin", 
+        ...formData,
+        image: imageUrl,
         date: Timestamp.now(),
       };
       await addDoc(collection(db, 'blog'), newPost);
@@ -68,6 +77,11 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
   };
 
   return (
@@ -84,18 +98,12 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">Title</Label>
-              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} className="col-span-3" required />
-            </div>
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="content" className="text-right pt-2">Content</Label>
-              <Textarea id="content" value={content} onChange={(e) => setContent(e.target.value)} className="col-span-3 min-h-[200px]" placeholder="Write your post content here. Markdown is supported." required />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="image" className="text-right">Image URL</Label>
-              <Input id="image" value={image} onChange={(e) => setImage(e.target.value)} className="col-span-3" />
-            </div>
+            <PostForm
+              formData={formData}
+              onFormChange={handleInputChange}
+              imageFile={imageFile}
+              onImageFileChange={setImageFile}
+            />
             {error && <div className="col-span-4 flex items-center p-3 bg-destructive/10 text-destructive rounded-lg text-sm"><AlertCircle className="h-4 w-4 mr-2" />{error}</div>}
           </div>
           <DialogFooter>
