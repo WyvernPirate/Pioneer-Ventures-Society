@@ -27,7 +27,7 @@ const formatDate = (timestamp: Timestamp) => {
 };
 
 // Helper to create a short excerpt from full content
-const createExcerpt = (content: string, maxLength = 150) => {
+const createExcerpt = (content: string, maxLength = 350) => {
   if (!content) return '';
   // First, strip markdown characters for a cleaner plain text representation.
   const plainText = content
