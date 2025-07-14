@@ -8,15 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-
-interface MemberData {
-  name: string;
-  email: string;
-  role: string;
-  bio: string;
-  image: string;
-  spotlight: boolean;
-}
+import { type Member } from '@/types';
 
 export default function EditMemberPage() {
   const { memberId } = useParams<{ memberId: string }>();
@@ -26,7 +18,7 @@ export default function EditMemberPage() {
   const [status, setStatus] = useState<{ loading: boolean; submitting: boolean; error: string | null }>({
     loading: true, submitting: false, error: null
   });
-  const [formData, setFormData] = useState<MemberData>({
+  const [formData, setFormData] = useState<Omit<Member, 'id'>>({
     name: '',
     email: '',
     role: '',
