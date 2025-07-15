@@ -64,11 +64,11 @@ export default function AdminRegistrationsPage() {
     fetchRegistrations();
   }, []);
 
-  const downloadCsv = (data: Registration[], filename: string) => {
-    const csvData = data.map(item => ({ name: item.name, email: item.email, registrationDate: item.registrationDate }));
-    const csvString = [Object.keys(csvData[0]).join(','), ...csvData.map(row => Object.values(row).join(','))].join('\n');
-    const blob = new Blob([csvString], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
+  const downloadCsv = (data: any[], filename: string, headers: string[]) => {
+    const csvData = data.map(item => headers.map(header => item[header] || ''));
+    const csvContent = [headers.join(','), ...csvData.map(row => row.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `${filename}.csv`;
@@ -91,15 +91,21 @@ export default function AdminRegistrationsPage() {
           {error && <div className="flex items-center p-4 bg-destructive/10 text-destructive rounded-lg"><AlertCircle className="h-5 w-5 mr-3" /><p>{error}</p></div>}
           {!loading && !error && (
             <div className="space-y-3">
-              {memberRegistrations.length > 0 ? (
+              {memberRegistrations.length > 0 && memberRegistrations[0].name ? (
                 <>
                   {memberRegistrations.map(registration => (
                     <div key={registration.id} className="flex items-center justify-between p-3 border rounded-md">
                       <span>{registration.name} ({registration.email})</span>
                     </div>
                   ))}
-                  <Button variant="outline" onClick={() => downloadCsv(memberRegistrations, 'member-registrations')}>
-                    <Download className="mr-2 h-4 w-4" /> Download All
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      downloadCsv(memberRegistrations, 'member-registrations', ['name', 'email', 'registrationDate'])
+                    }
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download All
                   </Button>
                 </>
               ) : (
@@ -107,7 +113,43 @@ export default function AdminRegistrationsPage() {
               )}
             </div>
           )}
-
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Event Registrations</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {loading && <div className="flex justify-center items-center py-10"><Loader2 className="h-8 w-8 animate-spin text-primary" /><p className="ml-3 text-muted-foreground">Loading Registrations...</p></div>}
+          {error && <div className="flex items-center p-4 bg-destructive/10 text-destructive rounded-lg"><AlertCircle className="h-5 w-5 mr-3" /><p>{error}</p></div>}
+          {!loading && !error && (
+            <div className="space-y-3">
+              {eventRegistrations.length > 0 ? (
+                <>
+                  {eventRegistrations.map(registration => (
+                    <div key={registration.id} className="flex items-center justify-between p-3 border rounded-md">
+                      <span>{registration.name} ({registration.email}) - {registration.event}</span>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      downloadCsv(
+                        eventRegistrations,
+                        'event-registrations',
+                        ['name', 'email', 'event', 'registrationDate']
+                      )
+                    }
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download All
+                  </Button>
+                </>
+              ) : (
+                <p className="text-muted-foreground">No event registrations found.</p>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
