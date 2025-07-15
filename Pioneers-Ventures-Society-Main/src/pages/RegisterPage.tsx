@@ -110,12 +110,6 @@ export default function RegisterPage() {
                   />
                 </div>
 
-                {/* Other Form Elements ... */}
-
-                <Button type="submit" disabled={isSubmitting} className="w-full bg-accent text-accent-foreground hover:bg-accent/90 py-3 text-lg font-semibold">
-                  {isSubmitting ? "Submitting..." : "Submit Registration"}
-                   <p className="text-xs text-muted-foreground mt-1">Briefly list your entrepreneurial or innovation interests.</p>
-                </Button>
                 <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 py-3 text-lg font-semibold">
                   Submit Registration
                 </Button>
