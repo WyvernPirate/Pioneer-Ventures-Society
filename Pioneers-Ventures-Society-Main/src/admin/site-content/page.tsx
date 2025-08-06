@@ -48,39 +48,48 @@ export default function AdminSiteContentPage() {
 
   const handleHeroSave = async () => {
     setSaving(true);
-    try {
-      let imageUrl = heroData.imageUrl;
-      const oldImageUrl = heroData.imageUrl;
+    const originalHeroData = { ...heroData }; // Keep a copy in case of failure
+    let newImageUrl: string | null = null;
+    let oldImageUrlToDelete: string | null = null;
 
+    try {
+      let updatedData = { ...heroData };
+
+      // 1. If there's a new file, upload it and get the URL
       if (heroImageFile) {
         const storageRef = ref(storage, `site-content/pic/${Date.now()}-${heroImageFile.name}`);
         await uploadBytes(storageRef, heroImageFile);
-        imageUrl = await getDownloadURL(storageRef);
-
-        if (oldImageUrl) {
-          try {
-            const oldImageRef = ref(storage, oldImageUrl);
-            await deleteObject(oldImageRef);
-          } catch (deleteError: any) {
-            if (deleteError.code !== 'storage/object-not-found') {
-              console.error("Could not delete old hero image:", deleteError);
-            }
-          }
-        }
+        newImageUrl = await getDownloadURL(storageRef);
+        updatedData.imageUrl = newImageUrl;
+        oldImageUrlToDelete = originalHeroData.imageUrl || null;
       }
 
-      const updatedHeroData = { ...heroData, imageUrl };
+      // 2. Save the updated content to Firestore
       const heroDocRef = doc(db, 'siteContent', 'pic');
-      await setDoc(heroDocRef, updatedHeroData, { merge: true });
+      await setDoc(heroDocRef, updatedData, { merge: true });
       
-      setHeroData(updatedHeroData);
-      setHeroImageFile(null); // Clear file input after upload
+      // 3. Update local state and show success
+      setHeroData(updatedData);
+      setHeroImageFile(null); // Clear file input after successful upload
       toast({
         title: "Success",
         description: "Hero section content has been updated.",
       });
+
+      // 4. Clean up the old image from storage after everything else succeeded
+      if (oldImageUrlToDelete) {
+        try {
+          const oldImageRef = ref(storage, oldImageUrlToDelete);
+          await deleteObject(oldImageRef);
+        } catch (deleteError: any) {
+          if (deleteError.code !== 'storage/object-not-found') {
+            console.error("Could not delete old hero image, but content was saved:", deleteError);
+          }
+        }
+      }
     } catch (error) {
       console.error("Error saving hero content:", error);
+      setHeroData(originalHeroData);
       toast({ variant: "destructive", title: "Error", description: "Failed to save hero section." });
     } finally {
       setSaving(false);
