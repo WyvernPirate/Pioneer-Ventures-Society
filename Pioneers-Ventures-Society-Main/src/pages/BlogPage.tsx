@@ -5,7 +5,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { getFirestore, collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import ReactMarkdown from 'react-markdown';
 
 interface BlogPost {
   id: string;
@@ -132,9 +131,10 @@ export default function BlogPage() {
                     data-ai-hint={selectedPost.aiHint}
                   />
 
-                  <div className="prose prose-lg max-w-none mx-auto text-foreground/90 prose-headings:font-headline prose-headings:text-primary prose-strong:text-primary prose-a:text-accent hover:prose-a:text-accent/80">
-                    <ReactMarkdown>{selectedPost.content}</ReactMarkdown>
-                  </div>
+                  <div 
+                    className="prose prose-lg max-w-none mx-auto text-foreground/90 prose-headings:font-headline prose-headings:text-primary prose-strong:text-primary prose-a:text-accent hover:prose-a:text-accent/80"
+                    dangerouslySetInnerHTML={{ __html: selectedPost.content }}
+                  />
                 </div>
               </div>
             ) : (
