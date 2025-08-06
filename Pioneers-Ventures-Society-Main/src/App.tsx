@@ -8,6 +8,7 @@ import EventsPage from '@/pages/EventsPage';
 import InitiativesPage from '@/pages/InitiativesPage'; 
 import MembersPage from '@/pages/MembersPage'; 
 import ResourcesPage from '@/pages/ResourcesPage'; 
+import RegisterEventPage from '@/pages/RegisterEventPage';
 
 const Layout = () => {
   return (
@@ -26,7 +27,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="register" element={<RegisterPage />} /> 
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="register-event" element={<RegisterEventPage />} />
         <Route path="blog" element={<BlogPage />} /> 
         <Route path="events" element={<EventsPage />} /> 
         <Route path="initiatives" element={<InitiativesPage />} />
