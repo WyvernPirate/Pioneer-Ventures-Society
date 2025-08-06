@@ -183,7 +183,7 @@ export default function EventsSection() {
                     <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-3 text-base">{featuredEvent.description}</CardDescription>
                     {featuredEvent.registrationLink && (
                       <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90 text-base py-3 px-6">
-                        <Link to={`/register?event=${featuredEvent.id}`}><span className="flex items-center">Register Now <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
+                        <Link to={`/register-event?event=${featuredEvent.id}`}><span className="flex items-center">Register Now <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
                       </Button>
                     )}
                   </CardContent>
@@ -209,7 +209,7 @@ export default function EventsSection() {
                         <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">{event.description}</CardDescription>
                         {event.registrationLink && (
                           <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90">
-                            <Link to={`/register?event=${event.id}`}><span className="flex items-center">Register <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
+                            <Link to={`/register-event?event=${event.id}`}><span className="flex items-center">Register <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
                           </Button>
                         )}
                       </CardContent>
