@@ -140,7 +140,7 @@ export default function EventsPage() {
                     <CardDescription className="text-foreground/70 mb-4 flex-grow">{event.description}</CardDescription>
                     {event.registrationLink && (
                       <Button asChild className="mt-auto w-full sm:w-fit bg-primary hover:bg-primary/90">
-                        <Link to={`/register?event=${event.id}`}>
+                        <Link to={`/register-event?event=${event.id}`}>
                           <span className="flex items-center">Register for Event <ArrowRight className="ml-2 h-4 w-4" /></span>
                         </Link>
                       </Button>
