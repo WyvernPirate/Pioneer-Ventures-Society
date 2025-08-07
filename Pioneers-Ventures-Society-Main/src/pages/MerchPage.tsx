@@ -75,27 +75,26 @@ const MerchPage: React.FC = () => {
           Our Merch
         </h1>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Interested in buying something? Click "Buy Now" to open your email client and send us a pre-filled request. We'll get back to you to finalize the order.
+          Interested in buying something? Click "Order on WhatsApp" to send us a pre-filled message. We'll get back to you to finalize the order.
         </p>
         {merch.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {merch.map((item) => {
-              const adminEmail = "merch@pioneer-ventures-society.org"; // Replace with your admin contact
-              const subject = encodeURIComponent(`Merch Inquiry: ${item.name}`);
-              const body = encodeURIComponent(
+              // Replace with your admin's WhatsApp number (include country code, no "+")
+              const adminPhoneNumber = "26700000000";
+              const message = encodeURIComponent(
 `Hello PVS,
 
 I'm interested in purchasing the "${item.name}".
 
 Please fill out the following details for the order:
 - Name:
-- Contact Number/Email:
 - Size: [Available: ${item.sizes.join(" / ")}]
 - Quantity: 1
 
 Thank you!`
               );
-              const mailtoLink = `mailto:${adminEmail}?subject=${subject}&body=${body}`;
+              const whatsappLink = `https://wa.me/${adminPhoneNumber}?text=${message}`;
 
               return (
                 <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transform hover:-translate-y-2 transition-transform duration-300">
@@ -105,10 +104,12 @@ Thank you!`
                     <p className="text-xl font-bold text-blue-600 mb-4">${item.price.toFixed(2)}</p>
                     <p className="text-gray-600 text-base flex-grow mb-6">{item.description}</p>
                     <a
-                      href={mailtoLink}
-                      className="mt-auto block w-full bg-blue-600 text-white text-center font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                      href={whatsappLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto block w-full bg-green-500 text-white text-center font-bold py-3 px-4 rounded-lg hover:bg-green-600 transition-colors duration-300"
                     >
-                      Buy Now
+                      Order on WhatsApp
                     </a>
                   </div>
                 </div>
