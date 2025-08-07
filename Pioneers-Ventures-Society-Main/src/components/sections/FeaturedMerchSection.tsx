@@ -8,7 +8,7 @@ const FeaturedMerchSection: React.FC = () => {
   const featuredItems = dummyMerchData.slice(0, 3); // Show up to 3 items
 
   return (
-    <section id="featured-merch" className="py-16 sm:py-24 bg-background">
+    <section id="merch" className="py-16 sm:py-24 bg-background">
       <div className="container mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-headline text-3xl sm:text-4xl font-bold text-primary">
