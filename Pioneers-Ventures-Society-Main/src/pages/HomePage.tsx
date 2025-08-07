@@ -7,10 +7,11 @@ import AboutPvsSection from '@/components/sections/about-pvs-section';
 import ValuesSection from '@/components/sections/values-section';
 import CoreActivitiesSection from '@/components/sections/core-activities-section';
 import InitiativesSection from '@/components/sections/initiatives-section';
+import FeaturedMerchSection from '@/components/sections/FeaturedMerchSection';
 import BlogSummarySection from '@/components/sections/blog-summary-section';
 import EventsSection from '@/components/sections/events-section';
 import ResourcesSummarySection from '@/components/sections/resources-summary-section';
-import MemberSpotlightsSection from '@/components/sections/member-spotlights-section'; // This now serves as "Meet Our Founders"
+import MemberSpotlightsSection from '@/components/sections/member-spotlights-section';
 import CtaSection from '@/components/sections/cta-section';
 import type { HeroContent } from '@/types/site-content';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -70,6 +71,7 @@ const HomePage = () => {
       <CoreActivitiesSection />
       <InitiativesSection />
       <EventsSection />
+      <FeaturedMerchSection />
       <MemberSpotlightsSection />
       <BlogSummarySection />
       <ResourcesSummarySection />
