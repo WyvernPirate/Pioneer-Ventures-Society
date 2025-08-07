@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CalendarDays, Pin, Clock, ArrowRight, CalendarCheck, AlertCircle, Newspaper } from 'lucide-react';
+import { CalendarDays, Pin, Clock, ArrowRight, CalendarCheck, AlertCircle } from 'lucide-react';
 import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { getFirestore, collection, query, where, orderBy, limit, Timestamp, getDocs } from 'firebase/firestore';
@@ -38,32 +38,8 @@ const formatDate = (timestamp: Timestamp) => {
   });
 };
 
-// Helper to create a short excerpt from full content
-const createExcerpt = (content: string, maxLength = 150) => {
-  if (!content) return '';
-  // First, strip markdown characters for a cleaner plain text representation.
-  const plainText = content
-    .replace(/#{1,6}\s/g, '') // Headings
-    .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
-    .replace(/(\*|_)(.*?)\1/g, '$2') // Italic
-    .replace(/`{1,3}/g, '') // Code
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
-    .replace(/>\s/g, '') // Blockquotes
-    .replace(/!\[.*?\]\(.*?\)/g, '') // Images
-    .replace(/\n/g, ' ') // Newlines
-    .trim();
-
-  if (plainText.length <= maxLength) return plainText;
-
-  const trimmedString = plainText.substring(0, maxLength);
-  // Trim to the last space to avoid cutting words in half
-  const lastSpaceIndex = trimmedString.lastIndexOf(' ');
-  return (lastSpaceIndex > 0 ? trimmedString.substring(0, lastSpaceIndex) : trimmedString) + '...';
-};
-
 export default function EventsSection() {
   const [events, setEvents] = useState<Event[]>([]);
-  const [featuredPost, setFeaturedPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,12 +69,11 @@ export default function EventsSection() {
       };
 
       try {
-        const [upcomingEvents, post] = await Promise.all([
+        const [upcomingEvents] = await Promise.all([
           fetchUpcomingEvents(),
           fetchFeaturedPost()
         ]);
         setEvents(upcomingEvents);
-        setFeaturedPost(post);
       } catch (err) {
         console.error("Error fetching homepage section data:", err);
         setError("Could not load section content.");
@@ -225,37 +200,6 @@ export default function EventsSection() {
             <p className="text-center text-lg text-muted-foreground py-10">No upcoming events scheduled at the moment. Please check back soon!</p>
         )}
         
-        {!loading && !error && featuredPost && (
-          <div className="mt-16 md:mt-24 pt-16 border-t border-border">
-            <div className="text-center mb-12 md:mb-16">
-              <Newspaper className="h-12 w-12 text-accent mx-auto mb-4" />
-              <h2 className="font-headline text-3xl sm:text-4xl font-bold text-primary mb-4">
-                From The Blog
-              </h2>
-              <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-                Read our latest story.
-              </p>
-            </div>
-            <Card className="overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 flex flex-col md:flex-row">
-              <Link to="/blog" aria-label={`Read more about ${featuredPost.title}`} className="md:w-1/2">
-                <img src={featuredPost.image} alt={featuredPost.title} width={800} height={500} className="w-full h-64 md:h-full object-cover" data-ai-hint={featuredPost.aiHint} />
-              </Link>
-              <CardContent className="p-6 md:p-8 flex flex-col flex-grow md:w-1/2">
-                <Badge variant="default" className="bg-accent text-accent-foreground w-fit mb-3 text-sm">Latest Post</Badge>
-                <CardTitle className="font-headline text-2xl lg:text-3xl text-primary mb-3">
-                  <Link to="/blog" className="hover:text-accent transition-colors">
-                    {featuredPost.title}
-                  </Link>
-                </CardTitle>
-                <p className="text-sm text-muted-foreground mb-4">{formatDate(featuredPost.date)}</p>
-                <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-4 text-base">
-                  {createExcerpt(featuredPost.content)}
-                </CardDescription>
-                <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6"><Link to="/blog"><span className="flex items-center">Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
-              </CardContent>
-            </Card>
-          </div>
-        )}
         
         <div className="text-center mt-12">
           <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg" asChild>
