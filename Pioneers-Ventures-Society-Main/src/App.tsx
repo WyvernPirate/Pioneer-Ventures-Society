@@ -9,6 +9,7 @@ import InitiativesPage from '@/pages/InitiativesPage';
 import MembersPage from '@/pages/MembersPage'; 
 import ResourcesPage from '@/pages/ResourcesPage'; 
 import RegisterEventPage from '@/pages/RegisterEventPage';
+import MerchPage from './pages/MerchPage';
 
 const Layout = () => {
   return (
@@ -30,12 +31,11 @@ const App = () => {
         <Route path="register" element={<RegisterPage />} />
         <Route path="register-event" element={<RegisterEventPage />} />
         <Route path="blog" element={<BlogPage />} /> 
+        <Route path="merch" element={<MerchPage />} />
         <Route path="events" element={<EventsPage />} /> 
         <Route path="initiatives" element={<InitiativesPage />} />
         <Route path="members" element={<MembersPage />} />
         <Route path="resources" element={<ResourcesPage />} /> 
-        {/* Remove admin routes - they should only be accessible on admin subdomain */}
-        {/* 404 handler for any other routes */}
         <Route path="*" element={<div className="text-center p-8"><h1 className="text-4xl">404 - Page Not Found</h1></div>} />
       </Route>
     </Routes>
