@@ -24,6 +24,9 @@ const Header = () => {
            <Link to="/#events"><span>Events</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
+            <Link to="/merch"><span>Merch</span></Link>
+          </Button>
+          <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <Link to="/#meet-our-founders"><span>Meet Our Founders</span></Link>
           </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base">
