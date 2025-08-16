@@ -60,4 +60,4 @@ Thank you!`
   );
 };
 
-export default MerchCard;
+export default MerchCard ;
