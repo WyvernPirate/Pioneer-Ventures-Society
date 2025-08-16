@@ -6,22 +6,6 @@ const MerchPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSizes, setSelectedSizes] = useState<{ [key: string]: number }>({});
 
-  // To use live data from Firebase, comment out the useEffect below
-  // and uncomment this one.
-  // useEffect(() => {
-  //   const fetchMerch = async () => {
-  //     try {
-  //       const items = await getPublishedMerch();
-  //       setMerch(items);
-  //     } catch (error) {
-  //       console.error("Error fetching merchandise:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchMerch();
-  // }, []);
-
   useEffect(() => {
     const fetchMerch = async () => {
       try {
