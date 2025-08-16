@@ -20,7 +20,7 @@ export interface EventFormData {
 
 interface EventFormProps {
     formData: EventFormData;
-    onFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onDescriptionChange: (description: string) => void;
     date: Date | undefined;
     onDateChange: (date: Date | undefined) => void;
