@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { getPublishedMerch, type MerchItem } from "../firebase/merchService";
-import { dummyMerchData } from "../data/dummy";
 
 const MerchPage: React.FC = () => {
   const [merch, setMerch] = useState<MerchItem[]>([]);
@@ -23,18 +22,18 @@ const MerchPage: React.FC = () => {
   //   fetchMerch();
   // }, []);
 
-  // Use dummy data for visualization
   useEffect(() => {
-    setMerch(dummyMerchData);
-    // Initialize selected sizes state
-    const initialSizes = dummyMerchData.reduce((acc, item) => {
-      if (item.id) {
-        acc[item.id] = 0;
+    const fetchMerch = async () => {
+      try {
+        const items = await getPublishedMerch();
+        setMerch(items);
+      } catch (error) {
+        console.error("Error fetching merchandise:", error);
+      } finally {
+        setLoading(false);
       }
-      return acc;
-    }, {} as { [key: string]: number });
-    setSelectedSizes(initialSizes);
-    setLoading(false);
+    };
+    fetchMerch();
   }, []);
 
   const handleSizeCycle = (itemId: string, sizes: string[]) => {
