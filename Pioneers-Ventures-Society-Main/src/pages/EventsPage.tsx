@@ -137,7 +137,7 @@ export default function EventsPage() {
                       <p className="flex items-center"><Clock className="h-4 w-4 mr-2 text-primary/70" /> {event.time}</p>
                       <p className="flex items-center"><Pin className="h-4 w-4 mr-2 text-primary/70" /> {event.location}</p>
                     </div>
-                    <CardDescription className="text-foreground/70 mb-4 flex-grow">{event.description}</CardDescription>
+                                        <CardDescription className="text-foreground/70 mb-4 flex-grow" dangerouslySetInnerHTML={{ __html: event.description }} />
                     {event.registrationLink && (
                       <Button asChild className="mt-auto w-full sm:w-fit bg-primary hover:bg-primary/90">
                         <Link to={`/register-event?event=${event.id}`}>
@@ -188,7 +188,7 @@ export default function EventsPage() {
                       <p className="flex items-center"><CalendarDays className="h-3 w-3 mr-1.5 text-primary/60" /> {formatDate(event.date)}</p>
                       <p className="flex items-center"><Pin className="h-3 w-3 mr-1.5 text-primary/60" /> {event.location}</p>
                     </div>
-                    <CardDescription className="text-foreground/60 text-sm flex-grow line-clamp-3">{event.description}</CardDescription>
+                                        <CardDescription className="text-foreground/60 text-sm flex-grow line-clamp-3" dangerouslySetInnerHTML={{ __html: event.description }} />
                     {/* TODO: add a link to event summary or gallery */}
                   </CardContent>
                 </Card>
