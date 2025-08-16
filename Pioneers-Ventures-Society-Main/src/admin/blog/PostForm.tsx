@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/ui/RichTextEditor";
 
 export interface PostFormData {
     title: string;
@@ -12,11 +12,12 @@ export interface PostFormData {
 interface PostFormProps {
     formData: PostFormData;
     onFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onContentChange: (content: string) => void;
     onImageFileChange: (file: File | null) => void;
     imageFile: File | null;
 }
 
-export const PostForm = ({ formData, onFormChange, onImageFileChange, imageFile }: PostFormProps) => {
+export const PostForm = ({ formData, onFormChange, onContentChange, onImageFileChange, imageFile }: PostFormProps) => {
     return (
         <div className="grid gap-6">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -31,14 +32,12 @@ export const PostForm = ({ formData, onFormChange, onImageFileChange, imageFile 
             </div>
             <div className="grid grid-cols-4 items-start gap-4">
                 <Label htmlFor="content" className="text-right pt-2">Content</Label>
-                <Textarea
-                    id="content"
-                    value={formData.content}
-                    onChange={onFormChange}
-                    className="col-span-3 min-h-[250px]"
-                    placeholder="Write your post content here. Markdown is supported."
-                    required
-                />
+                <div className="col-span-3">
+                    <RichTextEditor
+                        value={formData.content}
+                        onChange={onContentChange}
+                    />
+                </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="image-upload" className="text-right">Image</Label>

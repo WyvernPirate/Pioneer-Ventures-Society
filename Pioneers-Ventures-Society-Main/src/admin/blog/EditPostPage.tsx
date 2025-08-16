@@ -15,9 +15,7 @@ export default function EditPostPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Form state using the shared interface
   const [formData, setFormData] = useState<PostFormData | null>(null);
-  // State for the new image file, if selected
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -35,7 +33,6 @@ export default function EditPostPage() {
       try {
         const docSnap = await getDoc(postDocRef);
         if (docSnap.exists()) {
-          // The data should conform to PostFormData
           setFormData(docSnap.data() as PostFormData);
         } else {
           setError("Blog post not found. It may have been deleted.");
@@ -53,13 +50,16 @@ export default function EditPostPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (!formData) return;
-    const { id, value } = e.target; // Using 'id' which matches keys in PostFormData
+    const { id, value } = e.target;
     setFormData(prev => prev ? { ...prev, [id]: value } : null);
+  };
+
+  const handleContentChange = (content: string) => {
+    setFormData(prev => prev ? { ...prev, content } : null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Check for formData as well, since it holds the data to be submitted
     if (!postId || !formData) {
       setError("Cannot submit, post ID is missing.");
       return;
@@ -73,7 +73,6 @@ export default function EditPostPage() {
       const storage = getStorage();
       let imageUrl = formData.image;
 
-      // If a new image file was selected, upload it and get the new URL
       if (imageFile) {
         const storageRef = ref(storage, `blog/pics/${Date.now()}-${imageFile.name}`);
         await uploadBytes(storageRef, imageFile);
@@ -82,7 +81,6 @@ export default function EditPostPage() {
 
       const postDocRef = doc(db, 'blog', postId);
       
-      // Prepare data for update, including the potentially new image URL
       const updatedData = { ...formData, image: imageUrl };
 
       await updateDoc(postDocRef, updatedData);
@@ -121,6 +119,7 @@ export default function EditPostPage() {
         <PostForm
           formData={formData}
           onFormChange={handleInputChange}
+          onContentChange={handleContentChange}
           imageFile={imageFile}
           onImageFileChange={setImageFile}
         />
