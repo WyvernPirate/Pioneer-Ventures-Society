@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { getFirestore, collection, query, where, orderBy, limit, Timestamp, getDocs } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
+import RichTextEditor from '../ui/RichTextEditor';
 
 interface Event {
   id: string;
