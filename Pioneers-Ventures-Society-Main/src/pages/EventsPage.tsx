@@ -188,7 +188,7 @@ export default function EventsPage() {
                       <p className="flex items-center"><CalendarDays className="h-3 w-3 mr-1.5 text-primary/60" /> {formatDate(event.date)}</p>
                       <p className="flex items-center"><Pin className="h-3 w-3 mr-1.5 text-primary/60" /> {event.location}</p>
                     </div>
-                                        <CardDescription className="text-foreground/60 text-sm flex-grow line-clamp-3" dangerouslySetInnerHTML={{ __html: event.description }} />
+                                                            <CardDescription className="text-foreground/60 text-sm flex-grow" dangerouslySetInnerHTML={{ __html: event.description }} />
                     {/* TODO: add a link to event summary or gallery */}
                   </CardContent>
                 </Card>
