@@ -13,7 +13,7 @@ import {
   SidebarFooter,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, ExternalLink, Home, CalendarDays, LogOut } from 'lucide-react';
+import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, ExternalLink, Home, CalendarDays, LogOut, ShoppingBag } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
@@ -90,6 +90,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <SidebarNavLink to="/dashboard/registrations" tooltip="View Registrations">
                 <ListChecks />
                 Registrations
+              </SidebarNavLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarNavLink to="/dashboard/merch" tooltip="Manage Merch">
+                <ShoppingBag />
+                Merch
               </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarSeparator />

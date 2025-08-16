@@ -1,6 +1,6 @@
 
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, CalendarDays } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, CalendarDays, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 
@@ -10,6 +10,7 @@ export default function AdminDashboardPage() {
     { title: 'Manage Blog Posts', href: '/dashboard/blog', icon: Newspaper, description: 'Create and update news articles.' },
     { title: 'View Members', href: '/dashboard/members', icon: Users, description: 'Access the member directory.' },
     { title: 'View Registrations', href: '/dashboard/registrations', icon: ListChecks, description: 'See event and member sign-ups.' },
+    { title: 'Manage Merch', href: '/dashboard/merch', icon: ShoppingBag, description: 'Add, edit, or delete merchandise.' },
     { title: 'Manage Documents', href: '/dashboard/documents', icon: FileText, description: 'Upload and manage downloadable resources.' },
     { title: 'Site Settings', href: '/dashboard/site-content', icon: Settings, description: 'Update static site content.' },
   ];

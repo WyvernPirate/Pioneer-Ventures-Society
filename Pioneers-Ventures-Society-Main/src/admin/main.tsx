@@ -14,6 +14,7 @@ import { getCurrentUser } from './auth.ts'
 import EditEventPage from './events/EditEventPage.tsx'
 import EditPostPage from './blog/EditPostPage.tsx'
 import EditMemberPage from './members/EditMemberPage.tsx'
+import AdminMerchPage from './merch/page.tsx'
 
 import '@/lib/firebase'; // Initialize Firebase
 import '@/index.css' 
@@ -70,6 +71,7 @@ const router = createBrowserRouter([
       { path: 'registrations', element: <AdminRegistrationsPage /> },
       { path: 'site-content', element: <AdminSiteContentPage /> },
       { path: 'documents', element: <AdminDocumentsPage /> },
+      { path: 'merch', element: <AdminMerchPage /> },
     ],
   },
 ])
