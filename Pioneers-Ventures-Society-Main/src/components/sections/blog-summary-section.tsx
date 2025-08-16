@@ -29,24 +29,12 @@ const formatDate = (timestamp: Timestamp) => {
 // Helper to create a short excerpt from full content
 const createExcerpt = (content: string, maxLength = 350) => {
   if (!content) return '';
-  // First, strip markdown characters for a cleaner plain text representation.
-  const plainText = content
-    .replace(/#{1,6}\s/g, '') // Headings
-    .replace(/(\*\*|__)(.*?)\1/g, '$2') // Bold
-    .replace(/(\*|_)(.*?)\1/g, '$2') // Italic
-    .replace(/`{1,3}/g, '') // Code
-    .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Links
-    .replace(/>\s/g, '') // Blockquotes
-    .replace(/!\[.*?\]\(.*?\)/g, '') // Images
-    .replace(/\n/g, ' ') // Newlines
-    .trim();
+  if (content.length <= maxLength) return content;
 
-  if (plainText.length <= maxLength) return plainText;
-
-  const trimmedString = plainText.substring(0, maxLength);
+  const truncated = content.substring(0, maxLength);
   // Trim to the last space to avoid cutting words in half
-  const lastSpaceIndex = trimmedString.lastIndexOf(' ');
-  return (lastSpaceIndex > 0 ? trimmedString.substring(0, lastSpaceIndex) : trimmedString) + '...';
+  const lastSpaceIndex = truncated.lastIndexOf(' ');
+  return (lastSpaceIndex > 0 ? truncated.substring(0, lastSpaceIndex) : truncated) + '...';
 };
 
 export default function BlogSummarySection() {
@@ -154,9 +142,7 @@ export default function BlogSummarySection() {
                       </Link>
                     </CardTitle>
                     <p className="text-sm text-muted-foreground mb-4">{formatDate(newestPost.date)}</p>
-                    <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-4 text-base">
-                      {createExcerpt(newestPost.content)}
-                    </CardDescription>
+                    <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-4 text-base" dangerouslySetInnerHTML={{ __html: createExcerpt(newestPost.content) }} />
                     <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary text-base py-3 px-6"><Link to="/blog"><span className="flex items-center">Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
                   </CardContent>
                 </Card>
@@ -184,9 +170,7 @@ export default function BlogSummarySection() {
                         </Link>
                       </CardTitle>
                       <p className="text-sm text-muted-foreground mb-3">{formatDate(post.date)}</p>
-                      <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">
-                        {createExcerpt(post.content)}
-                      </CardDescription>
+                      <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3" dangerouslySetInnerHTML={{ __html: createExcerpt(post.content) }} />
                       <Button variant="outline" asChild className="mt-auto w-fit self-start border-primary/50 text-primary hover:bg-primary/10 hover:text-primary"><Link to="/blog"><span className="flex items-center">Read More <ArrowRight className="ml-2 h-4 w-4" /></span></Link></Button>
                     </CardContent>
                   </Card>

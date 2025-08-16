@@ -38,6 +38,14 @@ const formatDate = (timestamp: Timestamp) => {
   });
 };
 
+const truncate = (html: string, length: number) => {
+  const strippedHtml = html.replace(/<[^>]+>/g, '');
+  if (strippedHtml.length > length) {
+    return strippedHtml.substring(0, length) + '...';
+  }
+  return html;
+};
+
 export default function EventsSection() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -155,7 +163,7 @@ export default function EventsSection() {
                       <p className="flex items-center"><Clock className="h-4 w-4 mr-2 text-primary/70" /> {featuredEvent.time}</p>
                       <p className="flex items-center"><Pin className="h-4 w-4 mr-2 text-primary/70" /> {featuredEvent.location}</p>
                     </div>
-                    <CardDescription className="text-foreground/75 mb-6 flex-grow line-clamp-3 text-base">{featuredEvent.description}</CardDescription>
+                    <CardDescription className="text-foreground/75 mb-6 flex-grow text-base">{truncate(featuredEvent.description, 400)}</CardDescription>
                     {featuredEvent.registrationLink && (
                       <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90 text-base py-3 px-6">
                         <Link to={`/register-event?event=${featuredEvent.id}`}><span className="flex items-center">Register Now <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
@@ -181,7 +189,7 @@ export default function EventsSection() {
                           <p className="flex items-center"><Clock className="h-4 w-4 mr-2 text-primary/70" /> {event.time}</p>
                           <p className="flex items-center"><Pin className="h-4 w-4 mr-2 text-primary/70" /> {event.location}</p>
                         </div>
-                        <CardDescription className="text-foreground/70 mb-4 flex-grow line-clamp-3">{event.description}</CardDescription>
+                                                                                                <CardDescription className="text-foreground/70 mb-4 flex-grow">{truncate(event.description, 200)}</CardDescription>
                         {event.registrationLink && (
                           <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90">
                             <Link to={`/register-event?event=${event.id}`}><span className="flex items-center">Register <ArrowRight className="ml-2 h-4 w-4" /></span></Link>

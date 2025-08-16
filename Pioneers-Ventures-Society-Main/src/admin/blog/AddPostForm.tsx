@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from '@/components/ui/textarea';
+import RichTextEditor from "@/components/ui/RichTextEditor";
 import { Loader2, AlertCircle } from 'lucide-react';
 import { getFirestore, collection, addDoc, Timestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -88,9 +88,13 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleContentChange = (content: string) => {
+    setFormData(prev => ({ ...prev, content }));
   };
 
   return (
@@ -102,7 +106,7 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
         <DialogHeader>
           <DialogTitle>Add New Blog Post</DialogTitle>
           <DialogDescription>
-            Fill in the details for the new post. The content field supports Markdown.
+            Fill in the details for the new post. The content field supports rich text.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -112,8 +116,13 @@ export function AddPostForm({ onPostAdded, children }: AddPostFormProps) {
               <Input id="title" value={formData.title} onChange={handleInputChange} className="col-span-3" required />
             </div>
             <div className="grid grid-cols-4 items-start gap-4">
-              <Label htmlFor="content" className="text-right pt-2">Content (Markdown)</Label>
-              <Textarea id="content" value={formData.content} onChange={handleInputChange} className="col-span-3 min-h-[250px]" placeholder="Write your blog post using Markdown..." required />
+              <Label htmlFor="content" className="text-right pt-2">Content</Label>
+              <div className="col-span-3">
+                <RichTextEditor
+                  value={formData.content}
+                  onChange={handleContentChange}
+                />
+              </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="image-upload" className="text-right">Featured Image</Label>

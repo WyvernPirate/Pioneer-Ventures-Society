@@ -85,9 +85,13 @@ export function AddEventForm({ onEventAdded, children }: AddEventFormProps) {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleDescriptionChange = (description: string) => {
+    setFormData(prev => ({ ...prev, description }));
   };
 
   return (
@@ -107,6 +111,7 @@ export function AddEventForm({ onEventAdded, children }: AddEventFormProps) {
             <EventForm
               formData={formData}
               onFormChange={handleInputChange}
+              onDescriptionChange={handleDescriptionChange}
               date={date}
               onDateChange={setDate}
               imageFile={imageFile}

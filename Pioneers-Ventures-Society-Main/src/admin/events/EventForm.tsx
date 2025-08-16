@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/ui/RichTextEditor";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calender";
@@ -21,13 +21,14 @@ export interface EventFormData {
 interface EventFormProps {
     formData: EventFormData;
     onFormChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onDescriptionChange: (description: string) => void;
     date: Date | undefined;
     onDateChange: (date: Date | undefined) => void;
     onImageFileChange: (file: File | null) => void;
     imageFile: File | null;
 }
 
-export const EventForm = ({ formData, onFormChange, date, onDateChange, onImageFileChange, imageFile }: EventFormProps) => {
+export const EventForm = ({ formData, onFormChange, onDescriptionChange, date, onDateChange, onImageFileChange, imageFile }: EventFormProps) => {
     return (
         <div className="grid gap-6">
             <div className="grid grid-cols-4 items-center gap-4">
@@ -89,14 +90,14 @@ export const EventForm = ({ formData, onFormChange, date, onDateChange, onImageF
                     className="col-span-3"
                 />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">Description</Label>
-                <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={onFormChange}
-                    className="col-span-3"
-                />
+            <div className="grid grid-cols-4 items-start gap-4">
+                <Label htmlFor="description" className="text-right pt-2">Description</Label>
+                <div className="col-span-3">
+                    <RichTextEditor
+                        value={formData.description}
+                        onChange={onDescriptionChange}
+                    />
+                </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="image-upload" className="text-right">Image</Label>

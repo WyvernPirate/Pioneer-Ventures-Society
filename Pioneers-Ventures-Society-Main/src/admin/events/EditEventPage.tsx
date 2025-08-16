@@ -89,6 +89,10 @@ export default function EditEventPage() {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
+  const handleDescriptionChange = (value: string) => {
+    setFormData(prev => ({ ...prev, description: value }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!eventId || !date) {
@@ -152,6 +156,7 @@ export default function EditEventPage() {
         <EventForm
           formData={formData}
           onFormChange={handleInputChange}
+          onDescriptionChange={handleDescriptionChange}
           date={date}
           onDateChange={setDate}
           imageFile={imageFile}
