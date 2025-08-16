@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import { Button } from '@/components/ui/button';
 import { getFirestore, collection, query, where, orderBy, limit, Timestamp, getDocs } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
-import RichTextEditor from '../ui/RichTextEditor';
 
 interface Event {
   id: string;
@@ -164,7 +163,7 @@ export default function EventsSection() {
                       <p className="flex items-center"><Clock className="h-4 w-4 mr-2 text-primary/70" /> {featuredEvent.time}</p>
                       <p className="flex items-center"><Pin className="h-4 w-4 mr-2 text-primary/70" /> {featuredEvent.location}</p>
                     </div>
-                    <CardDescription className="text-foreground/75 mb-6 flex-grow text-base">{truncate(featuredEvent.description, 200)}</CardDescription>
+                    <CardDescription className="text-foreground/75 mb-6 flex-grow text-base">{truncate(featuredEvent.description, 400)}</CardDescription>
                     {featuredEvent.registrationLink && (
                       <Button asChild className="mt-auto w-fit self-start bg-primary hover:bg-primary/90 text-base py-3 px-6">
                         <Link to={`/register-event?event=${featuredEvent.id}`}><span className="flex items-center">Register Now <ArrowRight className="ml-2 h-4 w-4" /></span></Link>
