@@ -4,31 +4,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { getPublishedMerch,type MerchItem } from '@/firebase/merchService';
 import { ArrowRight } from 'lucide-react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import MerchCard   from '@/components/ui/MerchCard';
 
-// Define MerchCard here to be self-contained
-const MerchCard: React.FC<{ item: MerchItem }> = ({ item }) => {
-  return (
-    <Card className="overflow-hidden flex flex-col h-full group">
-      <CardHeader className="p-0 relative">
-        <img src={item.imageUrl} alt={item.name} className="w-full h-72 object-cover" />
-        <div className="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-10 transition-all duration-300"></div>
-        <div className="absolute bottom-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-semibold">
-          ${item.price.toFixed(2)}
-        </div>
-      </CardHeader>
-      <CardContent className="p-6 flex-grow">
-        <CardTitle className="text-xl font-semibold text-card-foreground mb-2">{item.name}</CardTitle>
-        <p className="text-muted-foreground text-sm">{item.description}</p>
-      </CardContent>
-      <CardFooter className="p-4 bg-muted/40">
-          <Button asChild className="w-full">
-              <Link to={`/merch`}>View Details</Link>
-          </Button>
-      </CardFooter>
-    </Card>
-  );
-};
 
 const FeaturedMerchSection: React.FC = () => {
   const [featuredItems, setFeaturedItems] = useState<MerchItem[]>([]);
