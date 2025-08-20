@@ -40,6 +40,7 @@ export function AddMemberForm({ onMemberAdded, children }: AddMemberFormProps) {
   });
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
 
   const resetForm = () => {
     setFormData(initialFormData);
@@ -115,11 +116,28 @@ export function AddMemberForm({ onMemberAdded, children }: AddMemberFormProps) {
                     id="image-upload"
                     type="file"
                     accept="image/*"
-                    onChange={(e) => e.target.files && setImageFile(e.target.files[0])}
+                    onChange={(e) => {
+                      const file = e.target.files && e.target.files[0];
+                      if (file) {
+                        // Only allow safe image types (no SVG)
+                        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                        if (allowedTypes.includes(file.type)) {
+                          setImageFile(file);
+                          setImageError(null);
+                        } else {
+                          setImageFile(null);
+                          setImageError('Only JPG, PNG, GIF, or WebP images are allowed. SVG files are not supported for security reasons.');
+                        }
+                      } else {
+                        setImageFile(null);
+                        setImageError(null);
+                      }
+                    }}
                     className="flex-1"
                   />
                 </div>
                 {imageFile && <p className="text-sm text-muted-foreground mt-2">New image selected: {imageFile.name}</p>}
+                {imageError && <p className="text-sm text-destructive mt-2">{imageError}</p>}
               </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4"><Label htmlFor="spotlight" className="text-right">Feature on Homepage</Label><Switch id="spotlight" checked={formData.spotlight} onCheckedChange={(checked) => setFormData(prev => ({...prev, spotlight: checked}))} /></div>
