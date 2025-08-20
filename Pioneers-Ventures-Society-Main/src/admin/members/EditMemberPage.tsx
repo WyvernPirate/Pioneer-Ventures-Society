@@ -11,6 +11,12 @@ import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { type Member } from '@/types';
 
+// Helper function to validate image URLs
+function isSafeImageUrl(url: string): boolean {
+  // Only allow URLs that start with "https://" or "blob:"
+  return /^https:\/\/[a-zA-Z0-9.-]+\/.+$/.test(url) || url.startsWith("blob:");
+}
+
 export default function EditMemberPage() {
   const { memberId } = useParams<{ memberId: string }>();
   const navigate = useNavigate();
@@ -163,18 +169,31 @@ export default function EditMemberPage() {
             <Label htmlFor="image-upload" className="text-right pt-2">Profile Image</Label>
             <div className="col-span-3">
               <div className="flex items-center gap-4">
-                {(formData.image || imageFile) && (
+                {(imageFile && /^image\/(png|jpe?g|gif|webp|svg\+xml)$/.test(imageFile.type)) ? (
                   <img 
-                    src={imageFile ? URL.createObjectURL(imageFile) : formData.image} 
+                    src={URL.createObjectURL(imageFile)} 
                     alt="Member" 
                     className="h-24 w-24 object-cover rounded-full border" 
                   />
-                )}
+                ) : (formData.image && isSafeImageUrl(formData.image)) ? (
+                  <img 
+                    src={formData.image} 
+                    alt="Member" 
+                    className="h-24 w-24 object-cover rounded-full border" 
+                  />
+                ) : null}
                 <Input
                   id="image-upload"
                   type="file"
                   accept="image/*"
-                  onChange={(e) => e.target.files && setImageFile(e.target.files[0])}
+                  onChange={(e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file && /^image\/(png|jpe?g|gif|webp|svg\+xml)$/.test(file.type)) {
+                      setImageFile(file);
+                    } else if (file) {
+                      alert("Please select a valid image file (PNG, JPG, GIF, WEBP, SVG).");
+                    }
+                  }}
                   className="flex-1"
                 />
               </div>
