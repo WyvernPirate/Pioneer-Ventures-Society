@@ -10,6 +10,7 @@ import MembersPage from '@/pages/MembersPage';
 import ResourcesPage from '@/pages/ResourcesPage'; 
 import RegisterEventPage from '@/pages/RegisterEventPage';
 import MerchPage from './pages/MerchPage';
+import DonationsPage from './pages/DonationsPage';
 
 const Layout = () => {
   return (
@@ -35,7 +36,8 @@ const App = () => {
         <Route path="events" element={<EventsPage />} /> 
         <Route path="initiatives" element={<InitiativesPage />} />
         <Route path="members" element={<MembersPage />} />
-        <Route path="resources" element={<ResourcesPage />} /> 
+        <Route path="resources" element={<ResourcesPage />} />
+        <Route path="donations" element={<DonationsPage />} /> 
         <Route path="*" element={<div className="text-center p-8"><h1 className="text-4xl">404 - Page Not Found</h1></div>} />
       </Route>
     </Routes>
