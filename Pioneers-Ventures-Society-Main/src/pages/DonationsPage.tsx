@@ -305,9 +305,59 @@ export default function DonationsPage() {
                       ))}
                     </div>
                   )}
-                  <p className="text-sm text-muted-foreground">
-                    {selectedPaymentMethod && 'Select a payment method above to see instructions'}
-                  </p>
+                  {selectedPaymentMethod && (() => {
+                    const selectedMethod = paymentMethods.find(m => m.id === selectedPaymentMethod);
+                    if (!selectedMethod) return null;
+
+                    return (
+                      <Card className="border-green-200 bg-green-50/50 mt-4">
+                        <CardContent className="p-4">
+                          <div className="flex items-center mb-3">
+                            <span className="text-2xl mr-2">{selectedMethod.icon}</span>
+                            <div>
+                              <h4 className="font-semibold text-green-800">{selectedMethod.name}</h4>
+                              <p className="text-sm text-green-600">Ready to receive your donation</p>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-white border border-green-200 rounded-lg p-3 mb-3">
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-green-800">Send to:</span>
+                              <div className="flex items-center space-x-2">
+                                <code className="bg-green-100 px-2 py-1 rounded text-sm font-mono text-green-800">
+                                  {selectedMethod.number}
+                                </code>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => copyToClipboard(selectedMethod.number)}
+                                  className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="text-sm text-green-700">
+                            <p className="font-medium mb-1">Quick Instructions:</p>
+                            <ol className="space-y-1">
+                              {selectedMethod.instructions.slice(0, 2).map((instruction: string, index: number) => (
+                                <li key={index} className="flex items-start">
+                                  <span className="font-medium mr-2 text-green-600">{index + 1}.</span>
+                                  <span>{instruction}</span>
+                                </li>
+                              ))}
+                            </ol>
+                            <p className="text-xs text-green-600 mt-2 italic">
+                              Complete instructions will be shown after you submit the form
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })()}
                 </div>
 
                 {/* Donation Type */}
