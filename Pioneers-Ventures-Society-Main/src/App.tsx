@@ -11,6 +11,8 @@ import ResourcesPage from '@/pages/ResourcesPage';
 import RegisterEventPage from '@/pages/RegisterEventPage';
 import MerchPage from './pages/MerchPage';
 import DonationsPage from './pages/DonationsPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import PaymentCancelPage from './pages/PaymentCancelPage';
 
 const Layout = () => {
   return (
@@ -26,7 +28,7 @@ const Layout = () => {
 
 const App = () => {
   return (
-    <Routes>
+    <Routes future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="register" element={<RegisterPage />} />
@@ -37,7 +39,9 @@ const App = () => {
         <Route path="initiatives" element={<InitiativesPage />} />
         <Route path="members" element={<MembersPage />} />
         <Route path="resources" element={<ResourcesPage />} />
-        <Route path="donations" element={<DonationsPage />} /> 
+        <Route path="donations" element={<DonationsPage />} />
+        <Route path="donations/success" element={<PaymentSuccessPage />} />
+        <Route path="donations/cancel" element={<PaymentCancelPage />} />
         <Route path="*" element={<div className="text-center p-8"><h1 className="text-4xl">404 - Page Not Found</h1></div>} />
       </Route>
     </Routes>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +10,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Heart, DollarSign, Users, Target, CheckCircle } from 'lucide-react';
+import { Heart, DollarSign, Users, Target, CheckCircle, CreditCard, Smartphone, Banknote, Copy, ExternalLink } from 'lucide-react';
+import { getPaymentMethods, generatePaymentReference, type DonationData } from '@/lib/payment';
+import { sendDonationReceivedEmail, sendAdminDonationNotification } from '@/lib/email';
+import { getAdminEmails } from '@/lib/admin-config';
+import ProofUpload from '@/components/ui/ProofUpload';
 
 // Define a Zod schema for donation form validation
 const donationSchema = z.object({
@@ -28,7 +32,7 @@ const donationSchema = z.object({
   anonymous: z.boolean().default(false),
 });
 
-interface DonationFormData extends z.infer<typeof donationSchema> {}
+interface DonationFormData extends z.infer<typeof donationSchema> { }
 
 const donationAmounts = [10, 25, 50, 100, 250, 500];
 
@@ -43,11 +47,16 @@ const donationPurposes = [
 export default function DonationsPage() {
   const [customAmount, setCustomAmount] = useState<string>('');
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
+  const [showPaymentInstructions, setShowPaymentInstructions] = useState(false);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [proofBase64, setProofBase64] = useState<string>('');
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
     reset,
     setValue,
     watch,
@@ -67,6 +76,21 @@ export default function DonationsPage() {
 
   const watchedAmount = watch('amount');
 
+  useEffect(() => {
+    const loadPaymentMethods = async () => {
+      try {
+        const methods = await getPaymentMethods();
+        console.log('Loaded payment methods:', methods);
+        setPaymentMethods(methods);
+      } catch (error) {
+        console.error('Error loading payment methods:', error);
+        // Fallback to empty array, component will show loading or error state
+        setPaymentMethods([]);
+      }
+    };
+    loadPaymentMethods();
+  }, []);
+
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount);
     setCustomAmount('');
@@ -82,50 +106,95 @@ export default function DonationsPage() {
     }
   };
 
+  const handleProofUpload = (base64: string, file: File) => {
+    setProofBase64(base64);
+    setProofFile(file);
+  };
+
+  const handleProofRemove = () => {
+    setProofBase64('');
+    setProofFile(null);
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    // You could add a toast notification here
+  };
+
   const onSubmit = async (data: DonationFormData) => {
+    if (!selectedPaymentMethod) {
+      alert('Please select a payment method');
+      return;
+    }
+
     try {
-      const donationData = {
+      const paymentReference = generatePaymentReference('DON');
+      const hasProof = !!proofBase64;
+
+      const donationData: DonationData = {
         ...data,
-        donationDate: new Date().toISOString(),
-        status: 'pending', // Will be updated after payment processing
-        paymentMethod: 'pending', // Will be updated after payment processing
+        reference: paymentReference,
+        paymentMethod: selectedPaymentMethod,
+        proofOfPayment: proofBase64,
+        description: `Donation for ${donationPurposes.find(p => p.value === data.purpose)?.label}`,
+        name: data.fullName
       };
 
-      const docRef = await addDoc(collection(db, "donations"), donationData);
+      // Save donation record to Firebase
+      const docRef = await addDoc(collection(db, "donations"), {
+        ...donationData,
+        name: data.fullName, // Ensure name is saved correctly
+        donationDate: new Date().toISOString(),
+        status: hasProof ? 'pending_verification' : 'awaiting_payment',
+        createdAt: new Date().toISOString(),
+      });
+
       console.log("Donation record created with ID: ", docRef.id);
-      
-      // Here you would typically redirect to a payment processor
-      // For now, we'll just show success message
-      reset();
-      setSelectedAmount(null);
-      setCustomAmount('');
+
+      // Send email notifications
+      try {
+        // Send confirmation email to donor
+        await sendDonationReceivedEmail({
+          email: data.email,
+          name: data.fullName,
+          amount: data.amount,
+          reference: paymentReference,
+          paymentMethod: selectedPaymentMethod,
+          hasProof: hasProof
+        });
+        console.log('Donor email notification sent successfully');
+
+        // Send notification emails to all admin emails
+        const adminEmails = getAdminEmails();
+        const adminNotificationPromises = adminEmails.map(adminEmail =>
+          sendAdminDonationNotification({
+            donorName: data.fullName,
+            donorEmail: data.email,
+            amount: data.amount,
+            reference: paymentReference,
+            paymentMethod: selectedPaymentMethod,
+            purpose: data.purpose,
+            hasProof: hasProof,
+            adminEmail: adminEmail
+          })
+        );
+
+        await Promise.all(adminNotificationPromises);
+        console.log(`Admin notifications sent to ${adminEmails.length} admin(s)`);
+      } catch (emailError) {
+        console.error('Failed to send email notifications:', emailError);
+        // Don't fail the donation if email fails
+      }
+
+      // Show payment instructions
+      setShowPaymentInstructions(true);
     } catch (e) {
       console.error("Error submitting donation: ", e);
+      alert('Failed to submit donation. Please try again.');
     }
   };
 
-  if (isSubmitSuccessful) {
-    return (
-      <div className="flex flex-col min-h-screen bg-background">
-        <main className="flex-grow container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <Card className="shadow-xl border-green-200">
-              <CardContent className="p-8">
-                <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                <h1 className="text-3xl font-bold text-green-700 mb-4">Thank You!</h1>
-                <p className="text-lg text-muted-foreground mb-6">
-                  Your donation has been recorded. You will receive payment instructions via email shortly.
-                </p>
-                <Button onClick={() => window.location.reload()} className="bg-primary hover:bg-primary/90">
-                  Make Another Donation
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </main>
-      </div>
-    );
-  }
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -137,7 +206,7 @@ export default function DonationsPage() {
             Support Our Mission
           </h1>
           <p className="text-xl text-foreground/80 max-w-3xl mx-auto mb-8">
-            Your donation helps us empower the next generation of innovators and entrepreneurs. 
+            Your donation helps us empower the next generation of innovators and entrepreneurs.
             Every contribution makes a difference in building a stronger community.
           </p>
         </div>
@@ -212,6 +281,35 @@ export default function DonationsPage() {
                   {errors.amount && <p className="text-red-500 text-sm mt-1">{errors.amount.message}</p>}
                 </div>
 
+                {/* Payment Method */}
+                <div>
+                  <Label className="text-primary font-semibold text-lg mb-4 block">Choose Payment Method</Label>
+                  {paymentMethods.length === 0 ? (
+                    <div className="text-center py-4">
+                      <p className="text-muted-foreground">Loading payment methods...</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+                      {paymentMethods.map((method) => (
+                        <Button
+                          key={method.id}
+                          type="button"
+                          variant={selectedPaymentMethod === method.id ? "default" : "outline"}
+                          onClick={() => setSelectedPaymentMethod(method.id)}
+                          className="h-20 flex flex-col items-center justify-center p-3 text-left"
+                        >
+                          <span className="text-2xl mb-1">{method.icon}</span>
+                          <span className="text-sm font-medium">{method.name}</span>
+                          <span className="text-xs text-muted-foreground text-center">{method.description}</span>
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                  <p className="text-sm text-muted-foreground">
+                    {selectedPaymentMethod && 'Select a payment method above to see instructions'}
+                  </p>
+                </div>
+
                 {/* Donation Type */}
                 <div>
                   <Label className="text-primary font-semibold">Donation Type</Label>
@@ -221,7 +319,9 @@ export default function DonationsPage() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="one-time">One-time Donation</SelectItem>
-                      <SelectItem value="monthly">Monthly Recurring</SelectItem>
+                      <SelectItem value="monthly" disabled={true}>
+                        Monthly Recurring (Coming Soon)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.donationType && <p className="text-red-500 text-sm">{errors.donationType.message}</p>}
@@ -297,6 +397,29 @@ export default function DonationsPage() {
                   />
                 </div>
 
+                {/* Proof of Payment Upload */}
+                <div>
+                  <Label className="text-primary font-semibold">Proof of Payment (Optional)</Label>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {selectedPaymentMethod
+                      ? 'Upload a screenshot of your payment confirmation to speed up verification'
+                      : 'You can upload proof of payment after making the payment, or submit now and upload later'
+                    }
+                  </p>
+                  <ProofUpload
+                    onFileSelect={handleProofUpload}
+                    onFileRemove={handleProofRemove}
+                    selectedFile={proofFile}
+                    disabled={isSubmitting}
+                  />
+                  {proofBase64 && (
+                    <p className="text-sm text-green-600 mt-2 flex items-center">
+                      <CheckCircle className="h-4 w-4 mr-1" />
+                      Proof of payment uploaded - your donation will be verified faster!
+                    </p>
+                  )}
+                </div>
+
                 {/* Anonymous Option */}
                 <div className="flex items-center space-x-2">
                   <input
@@ -315,7 +438,7 @@ export default function DonationsPage() {
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 py-3 text-lg font-semibold"
                   disabled={isSubmitting || watchedAmount <= 0}
                 >
-                  {isSubmitting ? "Processing..." : `Donate P${watchedAmount || 0}`}
+                  {isSubmitting ? "Processing..." : `Submit P${watchedAmount || 0} Donation`}
                 </Button>
               </form>
 
@@ -325,6 +448,81 @@ export default function DonationsPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Payment Instructions */}
+          {showPaymentInstructions && (
+            <Card className="mt-8 border-green-200 bg-green-50/50">
+              <CardHeader>
+                <CardTitle className="flex items-center text-green-700">
+                  <CheckCircle className="mr-2 h-6 w-6" />
+                  Donation Submitted Successfully!
+                </CardTitle>
+                <CardDescription>
+                  Follow the instructions below to complete your P{watchedAmount} donation
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {(() => {
+                  const selectedMethod = paymentMethods.find(m => m.id === selectedPaymentMethod);
+                  if (!selectedMethod) return null;
+
+                  return (
+                    <Card className="border-muted">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-lg flex items-center">
+                          <span className="text-2xl mr-2">{selectedMethod.icon}</span>
+                          {selectedMethod.name}
+                        </CardTitle>
+                        <div className="flex items-center space-x-2">
+                          <span className="font-medium">Send to:</span>
+                          <code className="bg-muted px-2 py-1 rounded text-sm">{selectedMethod.number}</code>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyToClipboard(selectedMethod.number)}
+                          >
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <ol className="space-y-2 text-sm">
+                          {selectedMethod.instructions.map((instruction: string, index: number) => (
+                            <li key={index} className="flex items-start">
+                              <span className="font-medium mr-2 text-accent">{index + 1}.</span>
+                              <span>{instruction}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </CardContent>
+                    </Card>
+                  );
+                })()}
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-blue-800 mb-2">What happens next?</h4>
+                  <ul className="space-y-1 text-sm text-blue-700">
+                    <li>• Make the payment using the instructions above</li>
+                    <li>• {proofBase64 ? 'We received your proof of payment and will verify it within 24 hours' : 'Upload proof of payment for faster verification (optional)'}</li>
+                    <li>• You\'ll receive a confirmation email once verified</li>
+                    <li>• Contact us at finance@pioneer-ventures-society.org if you need help</li>
+                  </ul>
+                </div>
+
+                <div className="flex justify-center space-x-4 pt-4">
+                  <Button
+                    onClick={() => setShowPaymentInstructions(false)}
+                    variant="outline"
+                  >
+                    Make Another Donation
+                  </Button>
+                  <Button asChild>
+                    <a href="/">Back to Home</a>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
     </div>

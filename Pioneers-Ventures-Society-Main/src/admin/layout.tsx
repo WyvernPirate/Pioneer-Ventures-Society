@@ -13,7 +13,7 @@ import {
   SidebarFooter,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, ExternalLink, Home, CalendarDays, LogOut, ShoppingBag, Heart } from 'lucide-react';
+import { Briefcase, LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, ExternalLink, Home, CalendarDays, LogOut, ShoppingBag, Heart, CreditCard } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
@@ -99,9 +99,15 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarNavLink to="/dashboard/donations" tooltip="View Donations">
+              <SidebarNavLink to="/dashboard/donations" tooltip="Manage Donations">
                 <Heart />
                 Donations
+              </SidebarNavLink>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarNavLink to="/dashboard/payment-config" tooltip="Payment Methods">
+                <CreditCard />
+                Payment Methods
               </SidebarNavLink>
             </SidebarMenuItem>
             <SidebarSeparator />
