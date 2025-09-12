@@ -86,7 +86,6 @@ export default function AdminEventsPage() {
             </div>
             <div className="space-x-2">
               <Button variant="outline" size="sm" asChild>
-                {/* TODO: Link to an edit page */}
                 <Link to={`/dashboard/events/edit/${event.id}`}><Pencil className="h-4 w-4" /></Link>
               </Button>
               <DeleteEventDialog

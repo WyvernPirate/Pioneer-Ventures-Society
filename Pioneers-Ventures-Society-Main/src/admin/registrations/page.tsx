@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ListChecks, Download, Loader2, AlertCircle } from 'lucide-react';
-import { getFirestore, collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { CSVLink  } from 'react-csv';
+// import { CSVLink } from 'react-csv'; // Uncomment when CSV export is implemented
 
 interface Registration {
   id?: string;

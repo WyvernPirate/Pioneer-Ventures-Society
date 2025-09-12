@@ -19,9 +19,19 @@ export default function NewsletterForm() {
     const email = formData.get('email') as string;
 
     try {
-      // TODO: Replace with a call to your API endpoint
-      // For example: await fetch('/api/subscribe', { method: 'POST', body: JSON.stringify({ email }) });
-      console.log('Form submitted with email:', email);
+      // Newsletter subscription - integrate with your preferred service
+      // Example: Mailchimp, ConvertKit, or custom API
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Subscription failed');
+      }
+      
+      console.log('Newsletter subscription successful:', email);
       
       // Mock success for now
       const successMessage = "Thank you for subscribing!";

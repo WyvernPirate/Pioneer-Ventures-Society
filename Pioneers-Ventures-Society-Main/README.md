@@ -61,7 +61,7 @@ This platform is designed to showcase our mission, manage community members and 
     ```
 
 3. **Configure Firebase**
-    - Copy `.env.example` to `.env` and add your Firebase config.
+    - The project uses `.env` file for Firebase configuration (already set up).
 
 4. **Run locally**
     ```sh

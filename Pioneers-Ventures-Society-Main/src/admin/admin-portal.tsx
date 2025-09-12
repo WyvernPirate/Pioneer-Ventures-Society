@@ -1,6 +1,6 @@
 
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
-import { LayoutDashboard, Newspaper, Users, ListChecks, Settings, FileText, CalendarDays, ShoppingBag } from 'lucide-react';
+import { Newspaper, Users, ListChecks, Settings, FileText, CalendarDays, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 
