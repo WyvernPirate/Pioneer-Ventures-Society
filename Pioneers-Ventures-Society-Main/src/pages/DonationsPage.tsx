@@ -148,21 +148,21 @@ export default function DonationsPage() {
             <Card className="text-center">
               <CardContent className="p-6">
                 <Users className="h-12 w-12 text-accent mx-auto mb-3" />
-                <h3 className="text-2xl font-bold text-primary mb-2">500+</h3>
+                <h3 className="text-2xl font-bold text-primary mb-2">100+</h3>
                 <p className="text-muted-foreground">Members Supported</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="p-6">
                 <Target className="h-12 w-12 text-accent mx-auto mb-3" />
-                <h3 className="text-2xl font-bold text-primary mb-2">50+</h3>
+                <h3 className="text-2xl font-bold text-primary mb-2">20+</h3>
                 <p className="text-muted-foreground">Events Hosted</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="p-6">
                 <DollarSign className="h-12 w-12 text-accent mx-auto mb-3" />
-                <h3 className="text-2xl font-bold text-primary mb-2">$25K+</h3>
+                <h3 className="text-2xl font-bold text-primary mb-2">P5K+</h3>
                 <p className="text-muted-foreground">In Scholarships</p>
               </CardContent>
             </Card>
@@ -192,7 +192,7 @@ export default function DonationsPage() {
                         onClick={() => handleAmountSelect(amount)}
                         className="h-12"
                       >
-                        ${amount}
+                        P{amount}
                       </Button>
                     ))}
                   </div>
@@ -315,7 +315,7 @@ export default function DonationsPage() {
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 py-3 text-lg font-semibold"
                   disabled={isSubmitting || watchedAmount <= 0}
                 >
-                  {isSubmitting ? "Processing..." : `Donate $${watchedAmount || 0}`}
+                  {isSubmitting ? "Processing..." : `Donate P${watchedAmount || 0}`}
                 </Button>
               </form>
 
