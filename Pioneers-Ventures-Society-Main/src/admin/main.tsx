@@ -15,6 +15,8 @@ import EditEventPage from './events/EditEventPage.tsx'
 import EditPostPage from './blog/EditPostPage.tsx'
 import EditMemberPage from './members/EditMemberPage.tsx'
 import AdminMerchPage from './merch/page.tsx'
+import AdminDonationsPage from './donations/page.tsx'
+import PaymentConfigPage from './payment-config/page.tsx'
 
 import '@/lib/firebase'; // Initialize Firebase
 import '@/index.css' 
@@ -72,9 +74,16 @@ const router = createBrowserRouter([
       { path: 'site-content', element: <AdminSiteContentPage /> },
       { path: 'documents', element: <AdminDocumentsPage /> },
       { path: 'merch', element: <AdminMerchPage /> },
+      { path: 'donations', element: <AdminDonationsPage /> },
+      { path: 'payment-config', element: <PaymentConfigPage /> },
     ],
   },
-])
+], {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
+})
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -14,9 +14,10 @@ import { useSearchParams } from 'react-router-dom';
 const formSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
   email: z.string().email("Invalid email address"),
-  // phone: z.string().optional(), // Optional for now
-  // studentId: z.string().optional(),
-  // interests: z.string().optional(),
+  phone: z.string().optional(),
+  organization: z.string().optional(),
+  dietaryRestrictions: z.string().optional(),
+  specialRequests: z.string().optional(),
 });
 
 interface FormData extends z.infer<typeof formSchema> {}
@@ -67,6 +68,10 @@ export default function RegisterEventPage() {
     defaultValues: {
       fullName: "",
       email: "",
+      phone: "",
+      organization: "",
+      dietaryRestrictions: "",
+      specialRequests: "",
     },
   });
 
@@ -119,6 +124,27 @@ export default function RegisterEventPage() {
                   <Input type="email" id="email" {...register("email")} placeholder="e.g., tshepo@example.com" className="mt-1 border-primary/30 focus:ring-accent" />
                   {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
                 </div>
+
+                <div>
+                  <Label htmlFor="phone" className="text-primary font-semibold">Phone Number (Optional)</Label>
+                  <Input type="tel" id="phone" {...register("phone")} placeholder="e.g., +267 71234567" className="mt-1 border-primary/30 focus:ring-accent" />
+                </div>
+
+                <div>
+                  <Label htmlFor="organization" className="text-primary font-semibold">Organization/University (Optional)</Label>
+                  <Input type="text" id="organization" {...register("organization")} placeholder="e.g., BIUST, UB, Company Name" className="mt-1 border-primary/30 focus:ring-accent" />
+                </div>
+
+                <div>
+                  <Label htmlFor="dietaryRestrictions" className="text-primary font-semibold">Dietary Restrictions (Optional)</Label>
+                  <Input type="text" id="dietaryRestrictions" {...register("dietaryRestrictions")} placeholder="e.g., Vegetarian, Halal, Allergies" className="mt-1 border-primary/30 focus:ring-accent" />
+                </div>
+
+                <div>
+                  <Label htmlFor="specialRequests" className="text-primary font-semibold">Special Requests or Questions (Optional)</Label>
+                  <Input type="text" id="specialRequests" {...register("specialRequests")} placeholder="Any special accommodations needed?" className="mt-1 border-primary/30 focus:ring-accent" />
+                </div>
+
                 <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-accent/90 py-3 text-lg font-semibold" disabled={isSubmitting || loadingEvent}>
                   {isSubmitting ? "Submitting..." : "Submit Registration"}
                 </Button>

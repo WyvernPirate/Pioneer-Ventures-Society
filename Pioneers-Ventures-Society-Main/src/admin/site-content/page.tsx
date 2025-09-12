@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, orderBy, getDocs, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import type { HeroContent } from '@/types/site-content';
+import type { Initiative, InitiativeFormData } from '@/types/initiatives';
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Settings, Save, Loader2 } from 'lucide-react';
+import { Settings, Save, Loader2, Plus, Edit, Trash2, Sprout } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import InitiativeDialog from './InitiativeDialog';
+import { seedInitiatives } from './seedInitiatives';
 
 export default function AdminSiteContentPage() {
   const { toast } = useToast();
@@ -20,12 +23,15 @@ export default function AdminSiteContentPage() {
     imageUrl: '',
   });
   const [heroImageFile, setHeroImageFile] = useState<File | null>(null);
-  const [mission, setMission] = useState('');
-  const [coreValues, setCoreValues] = useState({ entrepreneurship: '' });
   const [loading, setLoading] = useState(true);
   const [savingHero, setSavingHero] = useState(false);
-  const [savingMission, setSavingMission] = useState(false);
-  const [savingValues, setSavingValues] = useState(false);
+
+  // Initiatives state
+  const [initiatives, setInitiatives] = useState<Initiative[]>([]);
+  const [showInitiativeDialog, setShowInitiativeDialog] = useState(false);
+  const [editingInitiative, setEditingInitiative] = useState<Initiative | null>(null);
+  const [savingInitiative, setSavingInitiative] = useState(false);
+  const [seeding, setSeeding] = useState(false);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -38,14 +44,17 @@ export default function AdminSiteContentPage() {
           setHeroData(heroDocSnap.data() as HeroContent);
         }
 
-        // Fetch text content (mission and values)
-        const textContentDocRef = doc(db, 'siteContent', 'textContent');
-        const textContentSnap = await getDoc(textContentDocRef);
-        if (textContentSnap.exists()) {
-          const data = textContentSnap.data();
-          setMission(data.mission || '');
-          setCoreValues(data.coreValues || { entrepreneurship: '' });
-        }
+
+
+        // Fetch initiatives
+        const initiativesQuery = query(collection(db, 'initiatives'), orderBy('order', 'asc'));
+        const initiativesSnapshot = await getDocs(initiativesQuery);
+        const initiativesList = initiativesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as Initiative[];
+        setInitiatives(initiativesList);
+
       } catch (error) {
         console.error("Error fetching site content:", error);
         toast({
@@ -117,42 +126,175 @@ export default function AdminSiteContentPage() {
     }
   };
 
-  const handleMissionSave = async () => {
-    setSavingMission(true);
-    try {
-      const textContentDocRef = doc(db, 'siteContent', 'textContent');
-      await setDoc(textContentDocRef, { mission }, { merge: true });
-      toast({
-        title: "Success",
-        description: "Mission statement has been updated.",
-      });
-    } catch (error) {
-      console.error("Error saving mission statement:", error);
-      toast({ variant: "destructive", title: "Error", description: "Failed to save mission statement." });
-    } finally {
-      setSavingMission(false);
-    }
+
+
+  // Initiative management functions
+  const handleInitiativeEdit = (initiative: Initiative) => {
+    setEditingInitiative(initiative);
+    setShowInitiativeDialog(true);
   };
 
-  const handleValuesSave = async () => {
-    setSavingValues(true);
+  const handleSeedInitiatives = async () => {
+    setSeeding(true);
     try {
-      const textContentDocRef = doc(db, 'siteContent', 'textContent');
-      // Saving the whole object to allow for more values in the future
-      await setDoc(textContentDocRef, { coreValues }, { merge: true });
+      await seedInitiatives();
+      // Refresh initiatives list
+      const initiativesQuery = query(collection(db, 'initiatives'), orderBy('order', 'asc'));
+      const initiativesSnapshot = await getDocs(initiativesQuery);
+      const initiativesList = initiativesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Initiative[];
+      setInitiatives(initiativesList);
+      
       toast({
         title: "Success",
-        description: "Core values have been updated.",
+        description: "Default initiatives have been added. You can now edit them and add your own images.",
       });
     } catch (error) {
-      console.error("Error saving core values:", error);
+      console.error("Error seeding initiatives:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to save core values.",
+        description: "Failed to seed initiatives.",
       });
     } finally {
-      setSavingValues(false);
+      setSeeding(false);
+    }
+  };
+
+  const validateImageSize = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const isValidSize = img.width === 600 && img.height === 400;
+        if (!isValidSize) {
+          toast({
+            variant: "destructive",
+            title: "Invalid Image Size",
+            description: "Image must be exactly 600x400 pixels.",
+          });
+        }
+        resolve(isValidSize);
+      };
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleInitiativeSave = async (formData: InitiativeFormData, imageFile: File | null) => {
+    if (!formData.title.trim() || !formData.description.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Title and description are required.",
+      });
+      return;
+    }
+
+    if (!editingInitiative && !imageFile) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Image is required for new initiatives.",
+      });
+      return;
+    }
+
+    if (imageFile) {
+      const isValidSize = await validateImageSize(imageFile);
+      if (!isValidSize) return;
+    }
+
+    setSavingInitiative(true);
+    try {
+      let imageUrl = editingInitiative?.imageUrl || '';
+
+      // Upload new image if provided
+      if (imageFile) {
+        const storageRef = ref(storage, `initiatives/${Date.now()}-${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+
+        // Delete old image if editing and it's not a placeholder
+        if (editingInitiative?.imageUrl && !editingInitiative.imageUrl.includes('placehold.co')) {
+          try {
+            const oldImageRef = ref(storage, editingInitiative.imageUrl);
+            await deleteObject(oldImageRef);
+          } catch (error) {
+            console.warn('Could not delete old image:', error);
+          }
+        }
+      }
+
+      const initiativeData = {
+        ...formData,
+        imageUrl,
+        updatedAt: new Date().toISOString(),
+        ...(editingInitiative ? {} : { createdAt: new Date().toISOString() }),
+      };
+
+      if (editingInitiative) {
+        // Update existing initiative
+        await updateDoc(doc(db, 'initiatives', editingInitiative.id!), initiativeData);
+        setInitiatives(prev => prev.map(init => 
+          init.id === editingInitiative.id ? { ...init, ...initiativeData } : init
+        ));
+        toast({
+          title: "Success",
+          description: "Initiative updated successfully.",
+        });
+      } else {
+        // Create new initiative
+        const docRef = await addDoc(collection(db, 'initiatives'), initiativeData);
+        setInitiatives(prev => [...prev, { id: docRef.id, ...initiativeData } as Initiative]);
+        toast({
+          title: "Success",
+          description: "Initiative created successfully.",
+        });
+      }
+
+      setShowInitiativeDialog(false);
+      setEditingInitiative(null);
+    } catch (error) {
+      console.error("Error saving initiative:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to save initiative.",
+      });
+    } finally {
+      setSavingInitiative(false);
+    }
+  };
+
+  const handleInitiativeDelete = async (initiative: Initiative) => {
+    if (!confirm(`Are you sure you want to delete "${initiative.title}"?`)) return;
+
+    try {
+      await deleteDoc(doc(db, 'initiatives', initiative.id!));
+      
+      // Delete image from storage if it's not a placeholder
+      if (initiative.imageUrl && !initiative.imageUrl.includes('placehold.co')) {
+        try {
+          const imageRef = ref(storage, initiative.imageUrl);
+          await deleteObject(imageRef);
+        } catch (error) {
+          console.warn('Could not delete image:', error);
+        }
+      }
+
+      setInitiatives(prev => prev.filter(init => init.id !== initiative.id));
+      toast({
+        title: "Success",
+        description: "Initiative deleted successfully.",
+      });
+    } catch (error) {
+      console.error("Error deleting initiative:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete initiative.",
+      });
     }
   };
 
@@ -203,53 +345,119 @@ export default function AdminSiteContentPage() {
         </CardContent>
       </Card>
 
+      {/* Initiatives Management */}
       <Card>
         <CardHeader>
-          <CardTitle>Mission Statement</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Initiatives Management</CardTitle>
+            <div className="flex space-x-2">
+              {initiatives.length === 0 && (
+                <Button 
+                  onClick={handleSeedInitiatives}
+                  disabled={seeding}
+                  variant="outline"
+                  className="border-green-500 text-green-600 hover:bg-green-50"
+                >
+                  {seeding ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Seeding...
+                    </>
+                  ) : (
+                    <>
+                      <Sprout className="mr-2 h-4 w-4" />
+                      Add Default Initiatives
+                    </>
+                  )}
+                </Button>
+              )}
+              <Button 
+                onClick={() => {
+                  setEditingInitiative(null);
+                  setShowInitiativeDialog(true);
+                }}
+                className="bg-accent text-accent-foreground hover:bg-accent/90"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Initiative
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          <Label htmlFor="mission" className="text-primary font-semibold">Current Mission</Label>
-          <Textarea id="mission" value={mission} onChange={(e) => setMission(e.target.value)} className="mt-1 mb-3 border-primary/30 focus:ring-accent" rows={4} disabled={loading} />
-          <Button onClick={handleMissionSave} disabled={savingMission || loading} className="bg-accent text-accent-foreground hover:bg-accent/90">
-            {savingMission ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save Mission
-              </>
-            )}
-          </Button>
+          {loading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {initiatives.map((initiative) => (
+                <div key={initiative.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                  <div className="flex items-center space-x-4">
+                    <img 
+                      src={initiative.imageUrl} 
+                      alt={initiative.title}
+                      className="w-20 h-14 object-cover rounded border"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-lg">{initiative.title}</h4>
+                      <p className="text-sm text-muted-foreground line-clamp-2 max-w-md">
+                        {initiative.description}
+                      </p>
+                      <div className="flex items-center space-x-4 mt-1">
+                        <span className="text-xs bg-muted px-2 py-1 rounded">
+                          Order: {initiative.order}
+                        </span>
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          initiative.isActive 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {initiative.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleInitiativeEdit(initiative)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleInitiativeDelete(initiative)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              {initiatives.length === 0 && !loading && (
+                <div className="text-center py-12">
+                  <div className="text-muted-foreground mb-4">
+                    <Sprout className="h-12 w-12 mx-auto mb-2" />
+                    <p className="text-lg font-medium">No initiatives found</p>
+                    <p className="text-sm">Get started by adding default initiatives or create your own</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Core Values</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="value-entrepreneurship" className="text-primary font-semibold">Entrepreneurship</Label>
-            <Textarea id="value-entrepreneurship" value={coreValues.entrepreneurship} onChange={(e) => setCoreValues({ ...coreValues, entrepreneurship: e.target.value })} className="mt-1 border-primary/30 focus:ring-accent" rows={3} disabled={loading} />
-          </div>
-          {/* You can add more core values here by extending the state and JSX */}
-          <Button onClick={handleValuesSave} disabled={savingValues || loading} className="bg-accent text-accent-foreground hover:bg-accent/90">
-            {savingValues ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Save Core Values
-              </>
-            )}
-          </Button>
-        </CardContent>
-      </Card>
+
+      {/* Initiative Dialog */}
+      <InitiativeDialog
+        open={showInitiativeDialog}
+        onOpenChange={setShowInitiativeDialog}
+        initiative={editingInitiative}
+        onSave={handleInitiativeSave}
+        saving={savingInitiative}
+      />
     </div>
   );
 }

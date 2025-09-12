@@ -97,7 +97,13 @@ export default function RegisterPage() {
                 </div>
                 <div>
                   <Label htmlFor="studentId" className="text-primary font-semibold">University/Affiliation ID (Optional)</Label>
-                  <Input type="text" id="studentId" name="studentId" placeholder="e.g., BIUST 202001234" className="mt-1 border-primary/30 focus:ring-accent" />
+                  <Input 
+                    type="text" 
+                    id="studentId" 
+                    {...register("studentId")} 
+                    placeholder="e.g., BIUST 202001234" 
+                    className="mt-1 border-primary/30 focus:ring-accent" 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="interests" className="text-primary font-semibold">Areas of Interest</Label>

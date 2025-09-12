@@ -23,6 +23,9 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
-const analytics = getAnalytics(app);
+// Initialize Firebase Analytics (only in production to avoid localhost errors)
+const analytics = typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
+  ? getAnalytics(app) 
+  : null;
 
-export { app, auth, db, storage };
+export { app, auth, db, storage, analytics };
