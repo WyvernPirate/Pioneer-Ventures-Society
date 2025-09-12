@@ -51,7 +51,7 @@ The Admin Panel is a secure, role-based interface for creators (T1) and moderato
     ```
 
 3. **Configure Firebase**
-    - Copy `.env.example` to `.env` and insert your Firebase Admin Panel config (use same project as main site).
+    - Uses the same `.env` configuration as the main project (already set up).
 
 4. **Run locally**
     ```sh

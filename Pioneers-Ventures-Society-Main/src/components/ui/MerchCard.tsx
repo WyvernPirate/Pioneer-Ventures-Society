@@ -7,8 +7,8 @@ interface MerchCardProps {
   item: MerchItem;
 }
 
-// TODO: Move this to a central configuration file or environment variable
-const ADMIN_WHATSAPP_NUMBER = "26774421107";
+// Admin WhatsApp number for merch inquiries
+const ADMIN_WHATSAPP_NUMBER = import.meta.env.VITE_ADMIN_WHATSAPP || "26774421107";
 
 const MerchCard: React.FC<MerchCardProps> = ({ item }) => {
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);

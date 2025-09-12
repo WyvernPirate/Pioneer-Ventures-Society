@@ -11,7 +11,7 @@ type InspirationalQuoteProps = {
 
 export default function InspirationalQuote({ keywords, context, className }: InspirationalQuoteProps) {
   const [quote, setQuote] = useState<string | null>(null);
-  const [error, setError] = useState(false);
+  const [error] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
