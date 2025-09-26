@@ -1,0 +1,162 @@
+<!-- EmailJS Template for Pioneer Ventures Society Donations -->
+<!-- Copy this HTML into your EmailJS template -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{subject}}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        .title {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 20px 0;
+        }
+        .details-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .details-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .details-label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .details-value {
+            color: #555;
+        }
+        .message-content {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            white-space: pre-line;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+        .contact-info {
+            background-color: #e8f4fd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .success { color: #27ae60; }
+        .warning { color: #f39c12; }
+        .error { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🚀 Pioneer Ventures Society</div>
+            <h1 class="title">{{subject}}</h1>
+        </div>
+
+        <div class="content">
+            <p>Dear {{to_name}},</p>
+            
+            <div class="message-content">
+                {{message}}
+            </div>
+
+            <!-- Donation Details (if applicable) -->
+            {{#donation_amount}}
+            <div class="details-box">
+                <h3 style="margin-top: 0; color: #2c3e50;">Donation Details</h3>
+                <div class="details-row">
+                    <span class="details-label">Amount:</span>
+                    <span class="details-value amount">P{{donation_amount}}</span>
+                </div>
+                {{#donation_reference}}
+                <div class="details-row">
+                    <span class="details-label">Reference:</span>
+                    <span class="details-value">{{donation_reference}}</span>
+                </div>
+                {{/donation_reference}}
+                {{#payment_method}}
+                <div class="details-row">
+                    <span class="details-label">Payment Method:</span>
+                    <span class="details-value">{{payment_method}}</span>
+                </div>
+                {{/payment_method}}
+            </div>
+            {{/donation_amount}}
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h4 style="margin-top: 0; color: #2c3e50;">Need Help?</h4>
+                <p><strong>Email:</strong> finance@pioneer-ventures-society.org</p>
+                <p><strong>Phone:</strong> +267 77123456</p>
+                <p><strong>Website:</strong> https://pioneer-ventures-society.web.app</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>This is an automated message from Pioneer Ventures Society.</p>
+            <p>Empowering innovation and entrepreneurship in Botswana and beyond.</p>
+            <p style="font-size: 12px; color: #999;">
+                Generated on {{current_date}} | Please do not reply to this email
+            </p>
+        </div>
+    </div>
+</body>
+</html>

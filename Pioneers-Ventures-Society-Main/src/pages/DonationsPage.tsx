@@ -16,6 +16,11 @@ import { sendDonationReceivedEmail, sendAdminDonationNotification } from '@/lib/
 import { getAdminEmails } from '@/lib/admin-config';
 import ProofUpload from '@/components/ui/ProofUpload';
 
+// Import email testing utilities in development
+if (import.meta.env.DEV) {
+  import('@/lib/email-test');
+}
+
 // Define a Zod schema for donation form validation
 const donationSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),

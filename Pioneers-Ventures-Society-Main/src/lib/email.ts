@@ -188,30 +188,43 @@ Generated: ${new Date().toLocaleString()}
   })
 };
 
-// Send email using EmailJS (you'll need to set up EmailJS service)
+// Send email using EmailJS
 export const sendEmail = async (emailData: EmailData): Promise<boolean> => {
   try {
-    // For now, we'll log the email (in production, integrate with EmailJS or another service)
-    console.log('Email would be sent:', emailData);
+    // Check if EmailJS is configured
+    if (!emailConfig.serviceId || !emailConfig.templateId || !emailConfig.publicKey) {
+      console.warn('EmailJS not configured. Email would be sent:', emailData);
+      // In development, simulate successful sending
+      return process.env.NODE_ENV === 'development';
+    }
+
+    // Import EmailJS dynamically to avoid issues if not configured
+    const emailjs = await import('@emailjs/browser');
     
-    // TODO: Integrate with EmailJS or another email service
-    // Example EmailJS integration:
-    /*
-    const response = await emailjs.send(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
-      emailData,
-      'YOUR_PUBLIC_KEY'
+    // Add current date to email data
+    const emailDataWithDate = {
+      ...emailData,
+      current_date: new Date().toLocaleString()
+    };
+
+    const response = await emailjs.default.send(
+      emailConfig.serviceId,
+      emailConfig.templateId,
+      emailDataWithDate,
+      emailConfig.publicKey
     );
+
+    console.log('Email sent successfully:', response);
     return response.status === 200;
-    */
-    
-    // For development, simulate successful email sending
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(true), 1000);
-    });
   } catch (error) {
     console.error('Error sending email:', error);
+    
+    // In development, don't fail the process if email fails
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Development mode: Email would be sent:', emailData);
+      return true;
+    }
+    
     return false;
   }
 };
@@ -303,9 +316,9 @@ export const sendAdminDonationNotification = async (donationData: {
   });
 };
 
-// Email configuration for EmailJS (to be set up)
+// Email configuration for EmailJS
 export const emailConfig = {
-  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
-  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
-  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || '',
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID || '',
+  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '',
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '',
 };
