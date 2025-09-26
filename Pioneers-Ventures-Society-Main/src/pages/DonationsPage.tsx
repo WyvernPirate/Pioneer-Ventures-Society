@@ -14,40 +14,52 @@ import { Heart, DollarSign, Users, Target, CheckCircle, CreditCard, Smartphone, 
 import { getPaymentMethods, generatePaymentReference, type DonationData } from '@/lib/payment';
 import { sendDonationReceivedEmail, sendAdminDonationNotification } from '@/lib/email';
 import { getAdminEmails } from '@/lib/admin-config';
+import { getDonationPurposes } from '@/lib/donation-purposes';
+import type { DonationPurpose } from '@/types/donation-purposes';
 import ProofUpload from '@/components/ui/ProofUpload';
 
-// Import email testing utilities in development
+// Import testing utilities in development
 if (import.meta.env.DEV) {
   import('@/lib/email-test');
+  import('@/lib/firebase-test');
 }
 
 // Define a Zod schema for donation form validation
-const donationSchema = z.object({
-  fullName: z.string().min(1, "Full Name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().optional(),
-  amount: z.number().min(1, "Donation amount must be at least $1"),
-  donationType: z.enum(['one-time', 'monthly'], {
-    required_error: "Please select a donation type",
-  }),
-  purpose: z.enum(['general', 'events', 'scholarships', 'equipment', 'other'], {
-    required_error: "Please select a donation purpose",
-  }),
-  message: z.string().optional(),
-  anonymous: z.boolean().default(false),
-});
+const createDonationSchema = (purposes: DonationPurpose[]) => {
+  const purposeValues = purposes.length > 0 
+    ? purposes.map(p => p.value) as [string, ...string[]]
+    : ['general'] as [string, ...string[]]; // Fallback
 
-interface DonationFormData extends z.infer<typeof donationSchema> { }
+  return z.object({
+    fullName: z.string().min(1, "Full Name is required"),
+    email: z.string().email("Invalid email address"),
+    phone: z.string().optional(),
+    amount: z.number().min(1, "Donation amount must be at least $1"),
+    donationType: z.enum(['one-time', 'monthly'], {
+      required_error: "Please select a donation type",
+    }),
+    purpose: z.enum(purposeValues, {
+      required_error: "Please select a donation purpose",
+    }),
+    message: z.string().optional(),
+    anonymous: z.boolean().default(false),
+  });
+};
+
+interface DonationFormData {
+  fullName: string;
+  email: string;
+  phone?: string;
+  amount: number;
+  donationType: 'one-time' | 'monthly';
+  purpose: string;
+  message?: string;
+  anonymous: boolean;
+}
 
 const donationAmounts = [10, 25, 50, 100, 250, 500];
 
-const donationPurposes = [
-  { value: 'general', label: 'General Support', description: 'Support overall PVS operations and programs' },
-  { value: 'events', label: 'Events & Workshops', description: 'Fund community events and educational workshops' },
-  { value: 'scholarships', label: 'Student Scholarships', description: 'Support student members with financial assistance' },
-  { value: 'equipment', label: 'Equipment & Resources', description: 'Purchase tools and resources for members' },
-  { value: 'other', label: 'Other', description: 'Specify your preferred use in the message' },
-];
+
 
 export default function DonationsPage() {
   const [customAmount, setCustomAmount] = useState<string>('');
@@ -57,6 +69,7 @@ export default function DonationsPage() {
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [proofBase64, setProofBase64] = useState<string>('');
   const [paymentMethods, setPaymentMethods] = useState<any[]>([]);
+  const [donationPurposes, setDonationPurposes] = useState<DonationPurpose[]>([]);
 
   const {
     register,
@@ -66,14 +79,14 @@ export default function DonationsPage() {
     setValue,
     watch,
   } = useForm<DonationFormData>({
-    resolver: zodResolver(donationSchema),
+    resolver: zodResolver(createDonationSchema(donationPurposes)),
     defaultValues: {
       fullName: "",
       email: "",
       phone: "",
       amount: 0,
       donationType: 'one-time',
-      purpose: 'general',
+      purpose: donationPurposes.length > 0 ? donationPurposes[0].value : 'general',
       message: "",
       anonymous: false,
     },
@@ -82,18 +95,27 @@ export default function DonationsPage() {
   const watchedAmount = watch('amount');
 
   useEffect(() => {
-    const loadPaymentMethods = async () => {
+    const loadData = async () => {
       try {
-        const methods = await getPaymentMethods();
+        // Load payment methods and donation purposes in parallel
+        const [methods, purposes] = await Promise.all([
+          getPaymentMethods(),
+          getDonationPurposes()
+        ]);
+        
         console.log('Loaded payment methods:', methods);
+        console.log('Loaded donation purposes:', purposes);
+        
         setPaymentMethods(methods);
+        setDonationPurposes(purposes);
       } catch (error) {
-        console.error('Error loading payment methods:', error);
-        // Fallback to empty array, component will show loading or error state
+        console.error('Error loading data:', error);
+        // Fallback to empty arrays, component will show loading or error state
         setPaymentMethods([]);
+        setDonationPurposes([]);
       }
     };
-    loadPaymentMethods();
+    loadData();
   }, []);
 
   const handleAmountSelect = (amount: number) => {
