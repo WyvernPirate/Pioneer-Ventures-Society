@@ -39,11 +39,17 @@ const formatDate = (timestamp: Timestamp) => {
 };
 
 const truncate = (html: string, length: number) => {
-  const strippedHtml = html.replace(/<[^>]+>/g, '');
+  let strippedHtml = html;
+  let previous: string;
+  do {
+    previous = strippedHtml;
+    strippedHtml = strippedHtml.replace(/<[^>]+>/g, '');
+  } while (strippedHtml !== previous);
+
   if (strippedHtml.length > length) {
     return strippedHtml.substring(0, length) + '...';
   }
-  return html;
+  return strippedHtml;
 };
 
 export default function EventsSection() {
