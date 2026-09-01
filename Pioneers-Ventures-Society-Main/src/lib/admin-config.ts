@@ -28,7 +28,7 @@ export const adminConfig: AdminConfig = {
 
 // Get admin emails from environment or use defaults
 export const getAdminEmails = (): string[] => {
-  const envEmails = process.env.VITE_ADMIN_NOTIFICATION_EMAILS;
+  const envEmails = import.meta.env.VITE_ADMIN_NOTIFICATION_EMAILS;
   if (envEmails) {
     return envEmails.split(',').map(email => email.trim());
   }
@@ -37,10 +37,10 @@ export const getAdminEmails = (): string[] => {
 
 // Get primary admin email
 export const getPrimaryAdminEmail = (): string => {
-  return process.env.VITE_PRIMARY_ADMIN_EMAIL || adminConfig.primaryAdminEmail;
+  return import.meta.env.VITE_PRIMARY_ADMIN_EMAIL || adminConfig.primaryAdminEmail;
 };
 
 // Get finance email
 export const getFinanceEmail = (): string => {
-  return process.env.VITE_FINANCE_EMAIL || adminConfig.financeEmail;
+  return import.meta.env.VITE_FINANCE_EMAIL || adminConfig.financeEmail;
 };
