@@ -11,6 +11,7 @@ import ResourcesPage from '@/pages/ResourcesPage';
 import RegisterEventPage from '@/pages/RegisterEventPage';
 import MerchPage from './pages/MerchPage';
 import CalculatorPage from './pages/CalculatorPage';
+import NotFoundPage from './pages/NotFoundPage';
 import DonationsPage from './pages/DonationsPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import PaymentCancelPage from './pages/PaymentCancelPage';
@@ -44,7 +45,7 @@ const App = () => {
         <Route path="donations" element={<DonationsPage />} />
         <Route path="donations/success" element={<PaymentSuccessPage />} />
         <Route path="donations/cancel" element={<PaymentCancelPage />} />
-        <Route path="*" element={<div className="text-center p-8"><h1 className="text-4xl">404 - Page Not Found</h1></div>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );
