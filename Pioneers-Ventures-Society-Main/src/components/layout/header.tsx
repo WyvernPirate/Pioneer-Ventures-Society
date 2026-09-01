@@ -35,6 +35,9 @@ const Header = () => {
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
             <Link to="/#resources"><span>Resources</span></Link>
           </Button>
+          <Button variant="ghost" asChild className="text-sm sm:text-base hidden lg:inline-flex">
+            <Link to="/calculator"><span>Calculator</span></Link>
+          </Button>
           <Button variant="ghost" asChild className="text-sm sm:text-base hidden md:inline-flex">
             <Link to="/donations"><span>Donate</span></Link>
           </Button>

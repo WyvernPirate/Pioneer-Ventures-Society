@@ -10,6 +10,7 @@ import MembersPage from '@/pages/MembersPage';
 import ResourcesPage from '@/pages/ResourcesPage'; 
 import RegisterEventPage from '@/pages/RegisterEventPage';
 import MerchPage from './pages/MerchPage';
+import CalculatorPage from './pages/CalculatorPage';
 import DonationsPage from './pages/DonationsPage';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import PaymentCancelPage from './pages/PaymentCancelPage';
@@ -39,6 +40,7 @@ const App = () => {
         <Route path="initiatives" element={<InitiativesPage />} />
         <Route path="members" element={<MembersPage />} />
         <Route path="resources" element={<ResourcesPage />} />
+        <Route path="calculator" element={<CalculatorPage />} />
         <Route path="donations" element={<DonationsPage />} />
         <Route path="donations/success" element={<PaymentSuccessPage />} />
         <Route path="donations/cancel" element={<PaymentCancelPage />} />
