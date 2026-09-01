@@ -1,0 +1,22 @@
+# Pioneer Ventures Society
+
+> Pioneer Ventures Society (PVS) is a community organization fostering innovation and supporting new ventures through events, mentorship, and resources for aspiring entrepreneurs.
+
+PVS runs community initiatives, hosts events, publishes blog content, and maintains a member directory. This file gives large language models and AI crawlers a quick, structured overview of the site's public content.
+
+## Site
+
+- Home: https://pioneer-ventures-society.org/
+- About / Initiatives: https://pioneer-ventures-society.org/initiatives
+- Events: https://pioneer-ventures-society.org/events
+- Blog: https://pioneer-ventures-society.org/blog
+- Members: https://pioneer-ventures-society.org/members
+- Resources: https://pioneer-ventures-society.org/resources
+- Merchandise: https://pioneer-ventures-society.org/merch
+- Compound Interest Calculator: https://pioneer-ventures-society.org/calculator
+- Donations: https://pioneer-ventures-society.org/donations
+
+## Notes
+
+- Content under /donations/success and /donations/cancel is transactional and not meant for indexing.
+- The admin portal is a separate, authenticated subdomain and is not part of the public content set.

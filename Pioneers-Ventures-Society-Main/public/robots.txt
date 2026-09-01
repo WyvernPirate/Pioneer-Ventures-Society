@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /donations/success
+Disallow: /donations/cancel
